@@ -2,6 +2,8 @@
 
 「おうちハッカソン」の実装リポジトリ
 
+本番: https://gw2020-hackson-gobya.web.app
+
 ## 資料系(Google Drive)
 
 https://drive.google.com/drive/folders/1iFnorwXwSU54_lo6njc5q1-zBec_XMX9?usp=sharing
@@ -27,6 +29,7 @@ https://drive.google.com/drive/folders/1iFnorwXwSU54_lo6njc5q1-zBec_XMX9?usp=sha
   "_id": "type: string",
   "name": "type: string",
   "thema": "type: string, default: null",
+  "isReady": "type: Boolean, default: false",
   "isWolf": "type: Boolean, default: false",
 }
 
