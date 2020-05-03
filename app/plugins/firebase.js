@@ -11,6 +11,6 @@ if (!firebase.apps.length) {
 }
 
 const db = firebase.firestore()
-const settings = { timestampsInSnapshots: true }
-db.settings(settings)
+// const settings = { timestampsInSnapshots: true }
+// db.settings(settings)
 export { db }
