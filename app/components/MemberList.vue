@@ -5,7 +5,7 @@
       <v-list-item-content>{{ user.name }}</v-list-item-content>
       <v-list-item-action>
         <v-icon v-show="user.isReady">mdi-check-circle</v-icon>
-        <p v-show="!user.isReady">waiting ...</p>
+        <span v-show="!user.isReady">waiting ...</span>
       </v-list-item-action>
     </v-list-item>
   </v-list>
