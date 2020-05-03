@@ -2,7 +2,7 @@
 
 「おうちハッカソン」の実装リポジトリ
 
-本番: https://gw2020-hackson-gobya.web.app
+本番: https://gw-2020-hackathon-goby.web.app/
 
 ## 資料系(Google Drive)
 

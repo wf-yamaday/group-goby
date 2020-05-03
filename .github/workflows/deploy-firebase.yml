@@ -1,0 +1,40 @@
+name: Application Deploy to Firebase Hosting
+on:
+  push:
+    paths:
+      - 'app/**'
+    branches:
+      - master
+    
+
+jobs:
+  deploy:
+    name: Deploy Firebase hosting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup Node.js v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: yarn install
+        working-directory: ./app
+        run: yarn
+
+      - name: yarn build
+        working-directory: ./app
+        run: yarn build
+
+      - name: Install firebase-tools
+        working-directory: ./app
+        run: npm install -g firebase-tools
+
+      - name: Deploy to firebase hosting
+        working-directory: ./app
+        run: firebase deploy --token $FIREBASE_TOKEN
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
