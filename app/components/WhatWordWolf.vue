@@ -5,7 +5,7 @@
         <v-img width="150" height="180" src="/wolfman.png" />
       </div>
       <div>
-        <v-card-title>Word Wolfとは？</v-card-title>
+        <v-card-title class="balck--text">Word Wolfとは？</v-card-title>
         <span>
           Word Wolfは「異なるお題」を与えられた人(Wolf)を探し出すゲームです．
         </span>

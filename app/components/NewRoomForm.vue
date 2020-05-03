@@ -1,9 +1,9 @@
 <template>
   <v-card width="360" light>
+    <v-card-title class="--text">
+      Roomを新規作成
+    </v-card-title>
     <v-card-text>
-      <v-card-title class="headline">
-        Roomを新規作成
-      </v-card-title>
       <form>
         <v-text-field
           v-model="newRoomForm.roomName.value"
