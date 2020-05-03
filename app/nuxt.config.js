@@ -33,7 +33,8 @@ export default {
   plugins: [
     // Firestoreプラグイン
     '~/plugins/firebase.js',
-    '~/plugins/vuetify'
+    '~/plugins/vuetify',
+    '~/plugins/vue-uuid.js'
   ],
   /*
    ** Nuxt.js dev-modules
