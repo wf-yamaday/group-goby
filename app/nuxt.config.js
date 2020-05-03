@@ -30,7 +30,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vuetify'],
+  plugins: [
+    // Firestoreプラグイン
+    '~/plugins/firebase.js',
+    '~/plugins/vuetify'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -73,6 +77,12 @@ export default {
         }
       }
     }
+  },
+  env: {
+    FIREBASE_APIKEY: process.env.FIREBASE_APIKEY,
+    FIREBASE_AUTHDOMAIN: process.env.FIREBASE_AUTHDOMAIN,
+    FIREBASE_DATABASEURL: process.env.FIREBASE_DATABASEURL,
+    FIREBASE_PROJECTID: process.env.FIREBASE_PROJECTID
   },
   /*
    ** Build configuration

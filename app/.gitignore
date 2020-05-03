@@ -89,5 +89,7 @@ sw.*
 # Vim swap files
 *.swp
 
+.envrc
+
 # firebase
 .firebase/
