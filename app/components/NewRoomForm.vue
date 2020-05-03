@@ -7,18 +7,20 @@
       <form>
         <v-text-field
           v-model="newRoomForm.roomName.value"
+          :color="color"
           :label="newRoomForm.roomName.label"
           :loading="isLading"
           :disabled="isLading"
         />
         <v-text-field
           v-model="newRoomForm.ownerName.value"
+          :color="color"
           :label="newRoomForm.ownerName.label"
           :loading="isLading"
           :disabled="isLading"
         />
         <v-btn
-          color="primary"
+          :color="color"
           :disabled="submitDisabled"
           :loading="isLading"
           @click="doSubmit"
@@ -35,6 +37,7 @@ export default {
   data() {
     return {
       isLading: false,
+      color: 'info',
       newRoomForm: {
         roomName: {
           value: '',
@@ -63,8 +66,7 @@ export default {
         ownerName: this.newRoomForm.ownerName.value
       }
       this.isLading = false
-      this.$emit('submit', formData)
-      this.$router.push('/rooms/test')
+      this.$emit('doSubmit', formData)
     }
   }
 }
