@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { db } from '~/plugins/firebase.js'
 import WhatWordWolf from '~/components/WhatWordWolf'
 import NewRoomForm from '~/components/NewRoomForm'
 
@@ -15,9 +16,24 @@ export default {
     NewRoomForm
   },
   methods: {
-    doSubmit(data) {
-      console.log(data)
-      // this.$router.push('/rooms/test')
+    async doSubmit(data) {
+      const body = {
+        name: data.roomName,
+        owner: {
+          name: data.ownerName,
+          id: this.$uuid.v4()
+        },
+        guest: [],
+        isHire: true,
+        thema: [],
+        isStart: false,
+        isCounting: false,
+        vote: null
+      }
+      const roomsRef = db.collection('rooms')
+      const res = await roomsRef.add(body)
+      console.log(res)
+      this.$router.push('/rooms/' + res.id)
     }
   }
 }
