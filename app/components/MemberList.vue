@@ -1,6 +1,6 @@
 <template>
-  <v-list>
-    <v-subheader>参加者一覧</v-subheader>
+  <v-list light>
+    <v-subheader>参加者リスト</v-subheader>
     <v-list-item v-for="user in users" :key="user.id">
       <v-list-item-content>{{ user.name }}</v-list-item-content>
       <v-list-item-action>
