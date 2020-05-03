@@ -1,5 +1,5 @@
 <template>
-  <v-card min-width="360" light>
+  <v-card width="360" light>
     <div class="d-flex flex-no-wrap justify-space-between">
       <div>
         <v-img width="150" height="180" src="/wolfman.png" />
