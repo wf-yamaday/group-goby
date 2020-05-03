@@ -29,3 +29,8 @@ jobs:
       working-directory: ./app
     - run: yarn build
       working-directory: ./app
+      env:
+        FIREBASE_APIKEY: ${{ secrets.FIREBASE_API_KEY }}
+        FIREBASE_AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
+        FIREBASE_DATABASEURL: ${{ secrets.FIREBASE_DATABASEURL }}
+        FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
