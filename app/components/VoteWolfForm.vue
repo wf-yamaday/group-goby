@@ -1,21 +1,23 @@
 <template>
-  <form>
-    <v-list>
-      <v-list-item-group v-model="select">
-        <v-list-item v-for="user in users" :key="user.id">
-          <v-list-item-content>{{ user.name }}</v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-    <v-btn
-      color="primary"
-      :disabled="submitDisabled"
-      :loading="isLoading"
-      @click="doSubmit"
-    >
-      投票
-    </v-btn>
-  </form>
+  <v-list light>
+    <v-subheader>参加者リスト</v-subheader>
+    <v-list-item-group v-model="select">
+      <v-list-item v-for="user in users" :key="user.id">
+        <v-list-item-content>{{ user.name }}</v-list-item-content>
+      </v-list-item>
+    </v-list-item-group>
+    <div class="ma-2">
+      <v-btn
+        color="primary"
+        :loading="isLoading"
+        :disabled="submitDisabled"
+        block
+        @click="doSubmit"
+      >
+        投票
+      </v-btn>
+    </div>
+  </v-list>
 </template>
 
 <script>
