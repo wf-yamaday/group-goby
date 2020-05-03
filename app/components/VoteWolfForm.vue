@@ -8,7 +8,7 @@
     </v-list-item-group>
     <div class="ma-2">
       <v-btn
-        color="primary"
+        color="info"
         :loading="isLoading"
         :disabled="submitDisabled"
         block
