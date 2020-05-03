@@ -1,6 +1,6 @@
 <template>
-  <v-app dark>
-    <v-app-bar :color="color" fixed app>
+  <v-app>
+    <v-app-bar :color="color" fixed flat app>
       <v-toolbar-title v-text="title" />
     </v-app-bar>
     <v-content>
