@@ -27,6 +27,12 @@ const createStore = () => {
         const res = await db.collection('rooms').add(payload)
         return res.id
       },
+      // todo: エラーハンドリング
+      isStartToTrue({ _commit, state }) {
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({ isStart: true })
+      },
       joinRoomAction({ _commit, state }, payload) {
         const update = state.room.guest
         update.push(payload.formData)
