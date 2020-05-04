@@ -6,7 +6,9 @@
       <v-btn color="info" :disabled="!canStart" block>ゲームを開始</v-btn>
     </v-card>
     <v-card v-else class="my-2" light>
-      <v-btn color="info" block>準備完了</v-btn>
+      <v-btn color="info" block :disabled="user.isReady" @click="ready"
+        >準備完了</v-btn
+      >
     </v-card>
     <v-dialog v-if="!isOwner" v-model="isFirst" persistent>
       <guest-join-form :room-name="room.name" @click="joinRoom" />
@@ -39,8 +41,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ room: 'getRoom', users: 'getUsers' }),
-    ...mapState(['isOwner']),
+    ...mapGetters({ room: 'getRoom', users: 'getUsers', user: 'getUser' }),
+    ...mapState(['isOwner', 'userId']),
     canStart() {
       if (this.users.length < 2) {
         // 参加者が足りなければ始められない
@@ -64,7 +66,10 @@ export default {
       this.joinRoomAction(payload)
       this.isFirst = false
     },
-    ...mapActions(['joinRoomAction'])
+    ready() {
+      this.readyAction(this.userId)
+    },
+    ...mapActions(['joinRoomAction', 'readyAction'])
   }
 }
 </script>
