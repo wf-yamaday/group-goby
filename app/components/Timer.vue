@@ -4,7 +4,6 @@
     <v-card-text>
       <h1 class="time">{{ minutes }}:{{ seconds }}</h1>
       <v-btn v-if="isRunning === false" @click="startTimer()">◀︎</v-btn>
-      <v-btn v-else @click="stopTimer()">＝</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -24,6 +23,9 @@ export default {
   created() {
     this.minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes
     this.seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds
+  },
+  mounted() {
+    this.startTimer()
   },
   methods: {
     timerObj(duration) {
