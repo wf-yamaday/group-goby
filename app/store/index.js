@@ -14,6 +14,9 @@ const createStore = () => {
       ...vuexfireMutations,
       setUserId(state, userId) {
         state.userId = userId
+      },
+      setIsOwner(state) {
+        state.isOwner = true
       }
     },
     actions: {
@@ -27,13 +30,14 @@ const createStore = () => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       }),
       // todo: エラーハンドリング
-      async postRoom({ _commit }, payload) {
+      async postRoom({ commit }, payload) {
         const res = await db.collection('rooms').add(payload)
+        commit('setIsOwner')
         return res.id
       },
       // todo: トランザクション
       // isStartがfalseの時だけ呼び出せ
-      joinRoomAction({ _commit, state }, payload) {
+      joinRoomAction({ commit, state }, payload) {
         const update = state.room.guest
         update.push(payload.formData)
         db.collection('rooms')
