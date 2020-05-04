@@ -26,6 +26,13 @@ const createStore = () => {
       async postRoom({ _commit }, payload) {
         const res = await db.collection('rooms').add(payload)
         return res.id
+      },
+      joinRoomAction({ _commit, state }, payload) {
+        const update = state.room.guest
+        update.push(payload.formData)
+        db.collection('rooms')
+          .doc(payload.id)
+          .update({ guest: update })
       }
     },
     getters: {
