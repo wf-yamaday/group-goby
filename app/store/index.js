@@ -19,10 +19,7 @@ const createStore = () => {
       // roomIdからfirestoreのドキュメントを取得する関数
       // todo: エラーハンドリング
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
-        const result = await bindFirestoreRef(
-          'room',
-          db.collection('rooms').doc(roomId)
-        )
+        await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       })
     },
     getters: {
