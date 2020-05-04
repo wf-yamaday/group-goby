@@ -22,9 +22,7 @@
 
     <!-- ゲーム開始後の画面 -->
     <div v-else>
-      <v-dialog v-model="isThemaShow" persistent>
-        <thema-confirmation />
-      </v-dialog>
+      <thema-confirmation @click="themaChecked" />
     </div>
   </div>
 </template>
@@ -92,6 +90,10 @@ export default {
         this.isStartToTrue()
         this.isThemaShow = true
       }
+    },
+    themaChecked() {
+      // todo: firestoreの状態を更新
+      console.log('[debug]: テーマ確認完了')
     },
     ...mapActions(['joinRoomAction', 'readyAction', 'isStartToTrue'])
   }
