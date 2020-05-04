@@ -20,7 +20,7 @@ export default {
   props: {
     thema: {
       type: String,
-      default: 'ドラえもん'
+      default: ''
     }
   },
   data() {

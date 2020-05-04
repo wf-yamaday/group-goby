@@ -38,10 +38,19 @@ const createStore = () => {
         return res.id
       },
       // todo: エラーハンドリング
-      isStartToTrue({ _commit, state }) {
+      startGameAction({ _commit, dispatch, state }) {
+        const ownerUpdata = {
+          ...state.room.owner,
+          isReady: false
+        }
+        const guestUpdate = state.room.guest.map((user) => {
+          return { ...user, isReady: false }
+        })
         db.collection('rooms')
           .doc(state.room.id)
-          .update({ isStart: true })
+          .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
+        // 各ユーザーにテーマをセット
+        dispatch('distributionThema')
       },
       // todo: エラーハンドリング / payload → stateからid取得
       // todo: トランザクション
@@ -54,12 +63,80 @@ const createStore = () => {
           .update({ guest: update })
         commit('setUserId', payload.formData.id)
       },
+      async distributionThema({ _commit, state }) {
+        const querySnapshot = await db.collection('themas').get()
+        const themasSize = querySnapshot.size // 全テーマの数
+        const randomThema = Math.floor(Math.random() * themasSize) // どのテーマを選ぶかの乱数
+        const items = [] // dataの配列
+
+        querySnapshot.forEach((Doc) => {
+          items.push(Doc.data())
+        })
+
+        const thisThema = items[randomThema] // 選んだテーマ
+        const wolfThemaNum = Math.floor(Math.random() * 2)
+        let citizenThemaNum = 1
+        if (wolfThemaNum === 1) {
+          citizenThemaNum = citizenThemaNum - 1
+        }
+        const wolfThema = thisThema.data[wolfThemaNum] // wolfのテーマ
+        const citizenThema = thisThema.data[citizenThemaNum] // 市民のテーマ
+
+        const guest = state.room.guest // ゲストのリスト
+        const owner = state.room.owner
+
+        const guestLength = guest.length // ゲストの人数
+        const wolfNumber = Math.floor(Math.random() * (guestLength + 1)) // wolfの人の番号
+        if (wolfNumber === guestLength) {
+          // オーナーがwolfの時
+          const update = guest.map((user) => {
+            return {
+              ...user,
+              thema: citizenThema,
+              isWolf: false
+            }
+          })
+          const ownerUpdate = {
+            thema: wolfThema,
+            name: owner.name,
+            isWolf: true
+          }
+          console.log(ownerUpdate)
+          db.collection('rooms')
+            .doc(state.room.id)
+            .update({ guest: update, owner: ownerUpdate })
+        } else {
+          // guestの中にwolfがいる時
+          const update = guest.map((user, index) => {
+            if (index === wolfNumber) {
+              return {
+                ...user,
+                thema: wolfThema,
+                isWolf: true
+              }
+            } else {
+              return {
+                ...user,
+                thema: citizenThema,
+                isWolf: false
+              }
+            }
+          })
+          const ownerUpdate = {
+            thema: citizenThema,
+            name: owner.name,
+            isWolf: false
+          }
+          db.collection('rooms')
+            .doc(state.room.id)
+            .update({ guest: update, owner: ownerUpdate })
+        }
+      },
       // todo: トランザクション
-      // 要リファクタリング(userIdのstateが散っている)
-      readyAction({ _commit, state }, userId) {
+      readyAction({ _commit, state }) {
         const guest = state.room.guest
         const update = guest.map((user) => {
-          if (user.id !== userId) {
+          if (user.id !== state.userId) {
             return user
           } else {
             return {
@@ -71,6 +148,15 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .update({ guest: update })
+      },
+      ownerReadyAction({ _commit, state }) {
+        const ownerUpdata = {
+          ...state.room.owner,
+          isReady: true
+        }
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({ owner: ownerUpdata })
       },
       // todo: エラーハンドリング
       deleteRoom({ _commit, state }) {
