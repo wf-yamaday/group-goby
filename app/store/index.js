@@ -7,7 +7,8 @@ const createStore = () => {
     state: {
       rooms: [],
       room: null,
-      isOwner: false
+      isOwner: false,
+      user: ''
     },
     mutations: {
       ...vuexfireMutations
@@ -21,6 +22,11 @@ const createStore = () => {
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       }),
+      // todo: エラーハンドリング
+      async postRoom({ _commit }, payload) {
+        const res = await db.collection('rooms').add(payload)
+        return res.id
+      },
       joinRoomAction({ _commit, state }, payload) {
         const update = state.room.guest
         update.push(payload.formData)
@@ -47,5 +53,4 @@ const createStore = () => {
     }
   })
 }
-
 export default createStore
