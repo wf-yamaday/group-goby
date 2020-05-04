@@ -18,7 +18,7 @@ const createStore = () => {
         bindFirestoreRef('rooms', ref)
       }),
       // roomIdからfirestoreのドキュメントを取得する関数
-      // todo: エラーハンドリング
+      // todo: エラーハンドリング / isStart == false
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       }),
@@ -33,6 +33,7 @@ const createStore = () => {
           .doc(state.room.id)
           .update({ isStart: true })
       },
+      // todo: エラーハンドリング / payload → stateからid取得
       joinRoomAction({ _commit, state }, payload) {
         const update = state.room.guest
         update.push(payload.formData)
