@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 import RoomNameAndLink from '~/components/RoomNameAndLink'
 import MemberList from '~/components/MemberList'
@@ -53,9 +53,18 @@ export default {
   },
   methods: {
     joinRoom(guestName) {
-      // todo: firestoreにjoinするuserの情報を反映
+      const payload = {
+        id: this.$route.params.id,
+        formData: {
+          name: guestName,
+          id: this.$uuid.v4(),
+          isReady: false
+        }
+      }
+      this.joinRoomAction(payload)
       this.isFirst = false
-    }
+    },
+    ...mapActions(['joinRoomAction'])
   }
 }
 </script>
