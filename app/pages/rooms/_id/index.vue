@@ -22,7 +22,11 @@
 
     <!-- ゲーム開始後の画面 -->
     <div v-else>
-      <thema-confirmation v-if="!allUserChecked" @click="themaChecked" />
+      <thema-confirmation
+        v-if="!allUserChecked"
+        :thema="user.thema"
+        @click="themaChecked"
+      />
       <timer v-if="allUserChecked" />
     </div>
   </div>
@@ -63,7 +67,7 @@ export default {
     }),
     ...mapState(['isOwner', 'userId']),
     canStart() {
-      if (this.users.length < 2) {
+      if (this.users.length < 3) {
         // 参加者が足りなければ始められない
         return false
       } else {
