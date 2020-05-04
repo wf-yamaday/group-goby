@@ -26,9 +26,14 @@ const createStore = () => {
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       }),
+      // todo: エラーハンドリング
+      async postRoom({ _commit }, payload) {
+        const res = await db.collection('rooms').add(payload)
+        return res.id
+      },
       // todo: トランザクション
-      // isStartがfalseの時だけ呼び出せる
-      joinRoomAction({ commit, state }, payload) {
+      // isStartがfalseの時だけ呼び出せ
+      joinRoomAction({ _commit, state }, payload) {
         const update = state.room.guest
         update.push(payload.formData)
         db.collection('rooms')
@@ -85,5 +90,4 @@ const createStore = () => {
     }
   })
 }
-
 export default createStore
