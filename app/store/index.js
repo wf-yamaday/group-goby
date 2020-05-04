@@ -78,6 +78,15 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .update({ guest: update })
+      },
+      ownerReadyAction({ _commit, state }) {
+        const ownerUpdata = {
+          ...state.room.owner,
+          isReady: true
+        }
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({ owner: ownerUpdata })
       }
     },
 
