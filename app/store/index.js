@@ -8,7 +8,8 @@ const createStore = () => {
       rooms: [],
       room: null,
       isOwner: false,
-      user: ''
+      user: '',
+      thema: []
     },
     mutations: {
       ...vuexfireMutations
@@ -40,6 +41,76 @@ const createStore = () => {
         db.collection('rooms')
           .doc(payload.id)
           .update({ guest: update })
+      },
+      async distributionThema({ _commit, state }) {
+        const querySnapshot = await db.collection('themas').get()
+        const themasSize = querySnapshot.size // 全テーマの数
+        const randomThema = Math.floor(Math.random() * themasSize) // どのテーマを選ぶかの乱数
+        const items = [] // dataの配列
+
+        querySnapshot.forEach((Doc) => {
+          items.push(Doc.data())
+        })
+
+        console.log(items)
+        const thisThema = items[randomThema] // 選んだテーマ
+        const wolfThemaNum = Math.floor(Math.random() * 2)
+        let citizenThemaNum = 1
+        if (wolfThemaNum === 1) {
+          citizenThemaNum = citizenThemaNum - 1
+        }
+        const wolfThema = thisThema.data[wolfThemaNum] // wolfのテーマ
+        const citizenThema = thisThema.data[citizenThemaNum] // 市民のテーマ
+
+        const guest = state.room.guest // ゲストのリスト
+        const owner = state.room.owner
+
+        const guestLength = guest.length // ゲストの人数
+        const wolfNumber = Math.floor(Math.random() * (guestLength + 1)) // wolfの人の番号
+        if (wolfNumber === guestLength) {
+          // オーナーがwolfの時
+          const update = guest.map((user) => {
+            return {
+              ...user,
+              thema: citizenThema
+            }
+          })
+          const ownerUpdate = {
+            thema: wolfThema,
+            name: owner.name,
+            isWolf: true
+          }
+          console.log(ownerUpdate)
+          db.collection('rooms')
+            .doc(state.room.id)
+            .update({ guest: update, owner: ownerUpdate })
+        } else {
+          // guestの中にwolfがいる時
+          let count = 0
+          const update = guest.map((user) => {
+            if (count === wolfNumber) {
+              count += 1
+              return {
+                ...user,
+                thema: wolfThema,
+                isWolf: true
+              }
+            } else {
+              return {
+                ...user,
+                thema: citizenThema
+              }
+            }
+          })
+          const ownerUpdate = {
+            thema: citizenThema,
+            name: owner.name,
+            isWolf: false
+          }
+          db.collection('rooms')
+            .doc(state.room.id)
+            .update({ guest: update, owner: ownerUpdate })
+        }
       }
     },
     getters: {
