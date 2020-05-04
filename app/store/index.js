@@ -22,9 +22,9 @@ const createStore = () => {
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       }),
-      async postRoom({ _ }, payload) {
-        const roomsRef = db.collection('rooms')
-        const res = await roomsRef.add(payload)
+      // todo: エラーハンドリング
+      async postRoom({ _commit }, payload) {
+        const res = await db.collection('rooms').add(payload)
         return res.id
       }
     },
