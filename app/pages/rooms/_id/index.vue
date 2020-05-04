@@ -1,20 +1,28 @@
 <template>
   <div>
     <room-name-and-link :name="room.name" :link="room.id" />
-    <member-list :users="users" />
-    <v-card v-if="isOwner" class="my-2" light>
-      <v-btn color="info" :disabled="!canStart" block>ゲームを開始</v-btn>
-    </v-card>
-    <v-card v-else class="my-2" light>
-      <v-btn color="info" block :disabled="user.isReady" @click="ready"
-        >準備完了</v-btn
-      >
-    </v-card>
-    <v-dialog v-if="!isOwner" v-model="isFirst" persistent>
-      <guest-join-form :room-name="room.name" @click="joinRoom" />
-    </v-dialog>
-    <div class="black--text">
-      <!-- {{ room }} -->
+
+    <!-- ゲーム開始前の画面 -->
+    <div v-if="!isStart">
+      <member-list :users="users" />
+      <v-card v-if="isOwner" class="my-2" light>
+        <v-btn color="info" :disabled="!canStart" block @click="startGame"
+          >ゲームを開始</v-btn
+        >
+      </v-card>
+      <v-card v-else class="my-2" light>
+        <v-btn color="info" block :disabled="user.isReady" @click="ready"
+          >準備完了</v-btn
+        >
+      </v-card>
+      <v-dialog v-if="!isOwner" v-model="isFirst" persistent>
+        <guest-join-form :room-name="room.name" @click="joinRoom" />
+      </v-dialog>
+    </div>
+
+    <!-- ゲーム開始後の画面 -->
+    <div v-else>
+      <thema-confirmation @click="themaChecked" />
     </div>
   </div>
 </template>
@@ -25,23 +33,31 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import RoomNameAndLink from '~/components/RoomNameAndLink'
 import MemberList from '~/components/MemberList'
 import GuestJoinForm from '~/components/GuestJoinForm'
+import ThemaConfirmation from '~/components/ThemaConfirmation.vue'
 
 export default {
   components: {
     RoomNameAndLink,
     MemberList,
-    GuestJoinForm
+    GuestJoinForm,
+    ThemaConfirmation
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
   },
   data() {
     return {
-      isFirst: true
+      isFirst: true,
+      isThemaShow: false
     }
   },
   computed: {
-    ...mapGetters({ room: 'getRoom', users: 'getUsers', user: 'getUser' }),
+    ...mapGetters({
+      room: 'getRoom',
+      users: 'getUsers',
+      user: 'getUser',
+      isStart: 'isStart'
+    }),
     ...mapState(['isOwner', 'userId']),
     canStart() {
       if (this.users.length < 2) {
@@ -69,7 +85,17 @@ export default {
     ready() {
       this.readyAction(this.userId)
     },
-    ...mapActions(['joinRoomAction', 'readyAction'])
+    startGame() {
+      if (this.canStart) {
+        this.isStartToTrue()
+        this.isThemaShow = true
+      }
+    },
+    themaChecked() {
+      // todo: firestoreの状態を更新
+      console.log('[debug]: テーマ確認完了')
+    },
+    ...mapActions(['joinRoomAction', 'readyAction', 'isStartToTrue'])
   }
 }
 </script>
