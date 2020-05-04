@@ -22,7 +22,8 @@
 
     <!-- ゲーム開始後の画面 -->
     <div v-else>
-      <thema-confirmation @click="themaChecked" />
+      <thema-confirmation v-if="!allUserChecked" @click="themaChecked" />
+      <timer v-if="allUserChecked" />
     </div>
   </div>
 </template>
@@ -34,13 +35,15 @@ import RoomNameAndLink from '~/components/RoomNameAndLink'
 import MemberList from '~/components/MemberList'
 import GuestJoinForm from '~/components/GuestJoinForm'
 import ThemaConfirmation from '~/components/ThemaConfirmation.vue'
+import Timer from '~/components/Timer'
 
 export default {
   components: {
     RoomNameAndLink,
     MemberList,
     GuestJoinForm,
-    ThemaConfirmation
+    ThemaConfirmation,
+    Timer
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
@@ -67,6 +70,9 @@ export default {
         // 一人でもisReadyがfalseなら始められない
         return !this.users.some((user) => user.isReady === false)
       }
+    },
+    allUserChecked() {
+      return !this.users.some((user) => user.isReady === false)
     }
   },
   methods: {
@@ -83,19 +89,27 @@ export default {
       this.isFirst = false
     },
     ready() {
-      this.readyAction(this.userId)
+      this.readyAction()
     },
     startGame() {
       if (this.canStart) {
-        this.isStartToTrue()
+        this.startGameAction()
         this.isThemaShow = true
       }
     },
     themaChecked() {
-      // todo: firestoreの状態を更新
-      console.log('[debug]: テーマ確認完了')
+      if (this.isOwner) {
+        this.ownerReadyAction()
+      } else {
+        this.readyAction()
+      }
     },
-    ...mapActions(['joinRoomAction', 'readyAction', 'isStartToTrue'])
+    ...mapActions([
+      'joinRoomAction',
+      'readyAction',
+      'startGameAction',
+      'ownerReadyAction'
+    ])
   }
 }
 </script>
