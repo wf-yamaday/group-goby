@@ -37,6 +37,13 @@ const createStore = () => {
         commit('setIsOwner')
         return res.id
       },
+      // todo: エラーハンドリング
+      isStartToTrue({ _commit, state }) {
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({ isStart: true })
+      },
+      // todo: エラーハンドリング / payload → stateからid取得
       // todo: トランザクション
       // isStartがfalseの時だけ呼び出せ
       joinRoomAction({ commit, state }, payload) {
