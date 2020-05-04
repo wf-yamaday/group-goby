@@ -10,6 +10,7 @@ const createStore = () => {
       isOwner: false,
       userId: ''
     },
+
     mutations: {
       ...vuexfireMutations,
       setUserId(state, userId) {
@@ -19,6 +20,7 @@ const createStore = () => {
         state.isOwner = true
       }
     },
+
     actions: {
       setRoomsRef: firestoreAction(({ bindFirestoreRef }, ref) => {
         bindFirestoreRef('rooms', ref)
@@ -64,6 +66,7 @@ const createStore = () => {
           .update({ guest: update })
       }
     },
+
     getters: {
       getRooms: (state) => {
         return state.rooms
@@ -94,4 +97,5 @@ const createStore = () => {
     }
   })
 }
+
 export default createStore
