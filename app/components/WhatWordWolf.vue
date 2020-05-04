@@ -7,12 +7,26 @@
       <div>
         <v-card-title class="balck--text">Word Wolfとは？</v-card-title>
         <span>
-          Word Wolfは「異なるお題」を与えられた人(Wolf)を探し出すゲームです．
+          「異なるお題」を与えられた人（Wolf）を探し出すゲームです．
+          <br />
+          最低3人から始めることができます．
         </span>
       </div>
     </div>
     <v-card-actions>
-      <v-btn color="info" outlined block>ルールの詳細はこちら</v-btn>
+      <v-btn color="info" outlined block @click="click"
+        >ルールの詳細はこちら</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
+
+<script>
+export default {
+  methods: {
+    click() {
+      this.$emit('click')
+    }
+  }
+}
+</script>
