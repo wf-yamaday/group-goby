@@ -38,10 +38,17 @@ const createStore = () => {
         return res.id
       },
       // todo: エラーハンドリング
-      isStartToTrue({ _commit, state }) {
+      startGameAction({ _commit, state }) {
+        const ownerUpdata = {
+          ...state.room.owner,
+          isReady: false
+        }
+        const guestUpdate = state.room.guest.map((user) => {
+          return { ...user, isReady: false }
+        })
         db.collection('rooms')
           .doc(state.room.id)
-          .update({ isStart: true })
+          .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
       },
       // todo: エラーハンドリング / payload → stateからid取得
       // todo: トランザクション
