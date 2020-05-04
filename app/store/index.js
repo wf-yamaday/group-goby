@@ -62,11 +62,10 @@ const createStore = () => {
         commit('setUserId', payload.formData.id)
       },
       // todo: トランザクション
-      // 要リファクタリング(userIdのstateが散っている)
-      readyAction({ _commit, state }, userId) {
+      readyAction({ _commit, state }) {
         const guest = state.room.guest
         const update = guest.map((user) => {
-          if (user.id !== userId) {
+          if (user.id !== state.userId) {
             return user
           } else {
             return {
