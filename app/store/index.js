@@ -38,7 +38,7 @@ const createStore = () => {
         return res.id
       },
       // todo: エラーハンドリング
-      startGameAction({ _commit, state }) {
+      startGameAction({ _commit, dispatch, state }) {
         const ownerUpdata = {
           ...state.room.owner,
           isReady: false
@@ -49,6 +49,8 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
+        // 各ユーザーにテーマをセット
+        dispatch('distributionThema')
       },
       // todo: エラーハンドリング / payload → stateからid取得
       // todo: トランザクション
