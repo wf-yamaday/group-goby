@@ -7,25 +7,51 @@ const createStore = () => {
     state: {
       rooms: [],
       room: null,
-      isOwner: false
+      isOwner: false,
+      userId: ''
     },
     mutations: {
-      ...vuexfireMutations
+      ...vuexfireMutations,
+      setUserId(state, userId) {
+        state.userId = userId
+      }
     },
     actions: {
       setRoomsRef: firestoreAction(({ bindFirestoreRef }, ref) => {
         bindFirestoreRef('rooms', ref)
       }),
       // roomIdからfirestoreのドキュメントを取得する関数
+      // todo: isStartがfalseのroomのみ取得できる
       // todo: エラーハンドリング
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
       }),
-      joinRoomAction({ _commit, state }, payload) {
+      // todo: トランザクション
+      // isStartがfalseの時だけ呼び出せる
+      joinRoomAction({ commit, state }, payload) {
         const update = state.room.guest
         update.push(payload.formData)
         db.collection('rooms')
           .doc(payload.id)
+          .update({ guest: update })
+        commit('setUserId', payload.formData.id)
+      },
+      // todo: トランザクション
+      // 要リファクタリング(userIdのstateが散っている)
+      readyAction({ _commit, state }, userId) {
+        const guest = state.room.guest
+        const update = guest.map((user) => {
+          if (user.id !== userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isReady: true
+            }
+          }
+        })
+        db.collection('rooms')
+          .doc(state.room.id)
           .update({ guest: update })
       }
     },
@@ -43,6 +69,18 @@ const createStore = () => {
       },
       isStart: (state) => {
         return state.room.isStart
+      },
+      // userIdから自分の状態を取得
+      getUser: (state) => {
+        if (state.isOwner) {
+          return state.room.owner
+        }
+        const user = state.room.guest.find((user) => user.id === state.userId)
+        if (user === undefined) {
+          return { isReady: false }
+        } else {
+          return user
+        }
       }
     }
   })
