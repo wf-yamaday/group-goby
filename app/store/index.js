@@ -8,8 +8,7 @@ const createStore = () => {
       rooms: [],
       room: null,
       isOwner: false,
-      user: '',
-      thema: []
+      user: ''
     },
     mutations: {
       ...vuexfireMutations
@@ -52,7 +51,6 @@ const createStore = () => {
           items.push(Doc.data())
         })
 
-        console.log(items)
         const thisThema = items[randomThema] // 選んだテーマ
         const wolfThemaNum = Math.floor(Math.random() * 2)
         let citizenThemaNum = 1
@@ -72,7 +70,8 @@ const createStore = () => {
           const update = guest.map((user) => {
             return {
               ...user,
-              thema: citizenThema
+              thema: citizenThema,
+              isWolf: false
             }
           })
           const ownerUpdate = {
@@ -86,10 +85,8 @@ const createStore = () => {
             .update({ guest: update, owner: ownerUpdate })
         } else {
           // guestの中にwolfがいる時
-          let count = 0
-          const update = guest.map((user) => {
-            if (count === wolfNumber) {
-              count += 1
+          const update = guest.map((user, index) => {
+            if (index === wolfNumber) {
               return {
                 ...user,
                 thema: wolfThema,
@@ -98,7 +95,8 @@ const createStore = () => {
             } else {
               return {
                 ...user,
-                thema: citizenThema
+                thema: citizenThema,
+                isWolf: false
               }
             }
           })
