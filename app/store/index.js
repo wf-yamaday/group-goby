@@ -20,7 +20,14 @@ const createStore = () => {
       // todo: エラーハンドリング
       setRoomRef: firestoreAction(async ({ bindFirestoreRef }, roomId) => {
         await bindFirestoreRef('room', db.collection('rooms').doc(roomId))
-      })
+      }),
+      joinRoomAction({ _commit, state }, payload) {
+        const update = state.room.guest
+        update.push(payload.formData)
+        db.collection('rooms')
+          .doc(payload.id)
+          .update({ guest: update })
+      }
     },
     getters: {
       getRooms: (state) => {
