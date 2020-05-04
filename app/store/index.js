@@ -38,10 +38,19 @@ const createStore = () => {
         return res.id
       },
       // todo: エラーハンドリング
-      isStartToTrue({ _commit, state }) {
+      startGameAction({ _commit, dispatch, state }) {
+        const ownerUpdata = {
+          ...state.room.owner,
+          isReady: false
+        }
+        const guestUpdate = state.room.guest.map((user) => {
+          return { ...user, isReady: false }
+        })
         db.collection('rooms')
           .doc(state.room.id)
-          .update({ isStart: true })
+          .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
+        // 各ユーザーにテーマをセット
+        dispatch('distributionThema')
       },
       // todo: エラーハンドリング / payload → stateからid取得
       // todo: トランザクション
@@ -124,11 +133,10 @@ const createStore = () => {
         }
       },
       // todo: トランザクション
-      // 要リファクタリング(userIdのstateが散っている)
-      readyAction({ _commit, state }, userId) {
+      readyAction({ _commit, state }) {
         const guest = state.room.guest
         const update = guest.map((user) => {
-          if (user.id !== userId) {
+          if (user.id !== state.userId) {
             return user
           } else {
             return {
@@ -140,6 +148,15 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .update({ guest: update })
+      },
+      ownerReadyAction({ _commit, state }) {
+        const ownerUpdata = {
+          ...state.room.owner,
+          isReady: true
+        }
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({ owner: ownerUpdata })
       }
     },
 
