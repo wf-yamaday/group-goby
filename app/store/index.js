@@ -157,9 +157,14 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .update({ owner: ownerUpdata })
+      },
+      // todo: エラーハンドリング
+      deleteRoom({ _commit, state }) {
+        db.collection('rooms')
+          .doc(state.room.id)
+          .delete()
       }
     },
-
     getters: {
       getRooms: (state) => {
         return state.rooms
