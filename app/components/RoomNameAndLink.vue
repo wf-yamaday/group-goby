@@ -1,7 +1,7 @@
 <template>
   <div class="black--text">
     <h2>{{ name }}</h2>
-    <code id="link">{{ link }}</code>
+    <p id="link" class="red--text font-weight-light">{{ sharedLink }}</p>
     <v-btn color="info" icon @click="copyLink">
       <v-icon dark>mdi-content-copy</v-icon>
     </v-btn>
@@ -28,6 +28,12 @@ export default {
       snackbar: false,
       text: '',
       timeout: 700
+    }
+  },
+  computed: {
+    sharedLink() {
+      const baseUrl = 'https://gw-2020-hackathon-goby.web.app/rooms/'
+      return `${baseUrl}${this.link}`
     }
   },
   methods: {
