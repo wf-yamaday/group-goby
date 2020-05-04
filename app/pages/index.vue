@@ -1,6 +1,6 @@
 <template>
   <v-layout column justify-center align-center>
-    <what-word-wolf class="ma-2" />
+    <what-word-wolf class="ma-2" @click="goRulePage" />
     <new-room-form class="ma-2" @doSubmit="doSubmit" />
   </v-layout>
 </template>
@@ -32,6 +32,9 @@ export default {
       }
       const id = await this.$store.dispatch('postRoom', payload)
       this.$router.push('/rooms/' + id)
+    },
+    goRulePage() {
+      this.$router.push('/rules')
     }
   }
 }
