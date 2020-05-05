@@ -6,12 +6,12 @@
     <div v-if="!isStart">
       <member-list :users="users" />
       <v-card v-if="isOwner" class="my-2" light>
-        <select-category :categories="categories" @doSubmit="getSelected" />    
-        <v-btn color="info" :disabled="!canStart" block @click="startGame"
-          >ゲームを開始</v-btn
-        >
+        <v-card-text>
+          <select-category :categories="categories" @doSubmit="getSelected" />
+          <v-btn color="info" :disabled="!canStart" block @click="startGame"
+            >ゲームを開始</v-btn
+          >
         </v-card-text>
-
       </v-card>
       <v-card v-else class="my-2" color="grey lighten-5" flat light>
         <v-btn color="info" block :disabled="user.isReady" @click="ready"
