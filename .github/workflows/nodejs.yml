@@ -15,19 +15,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node: [12.x]
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Cache node_modules
-      uses: actions/cache@preview
-      with:
-        path: ./app/node_modules
-        key: ${{ matrix.os }}-build-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ matrix.os }}-build-
+      - name: Cache node_modules
+        uses: actions/cache@preview
+        with:
+          path: ./app/node_modules
+          key: ${{ matrix.os }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ matrix.os }}-build-
     - name: Install Dependencies
       working-directory: ./app
       run: yarn
