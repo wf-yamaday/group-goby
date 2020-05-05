@@ -6,7 +6,7 @@
     <div v-if="!isStart">
       <member-list :users="users" />
       <v-card v-if="isOwner" class="my-2" light>
-        <select-category :categories="categories" />
+        <select-category :categories="categories" @doSubmit="getSelected" />
         <v-btn color="info" :disabled="!canStart" block @click="startGame"
           >ゲームを開始</v-btn
         >
@@ -72,7 +72,8 @@ export default {
     return {
       isFirst: true,
       isThemaShow: false,
-      isVoteFormShow: false
+      isVoteFormShow: false,
+      selectedCategory: ''
     }
   },
   computed: {
@@ -116,9 +117,9 @@ export default {
     ready() {
       this.readyAction()
     },
-    startGame(categiryId) {
+    startGame() {
       if (this.canStart) {
-        this.startGameAction(categiryId)
+        this.startGameAction(this.selectedCategory)
         this.isThemaShow = true
       }
     },
@@ -134,6 +135,9 @@ export default {
     },
     voteWolf(selectUserId) {
       this.voteWolfAction(selectUserId)
+    },
+    getSelected(category) {
+      this.selectedCategory = category
     },
     ...mapActions([
       'joinRoomAction',

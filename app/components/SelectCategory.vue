@@ -8,8 +8,9 @@
         item-value="value"
         :items="categories"
         label="カテゴリ選択"
-        soloi
+        solo
         return-object
+        @change="getSelect"
       />
     </form>
   </div>
@@ -31,6 +32,11 @@ export default {
         id: '3ofwWE3XvWvlmY52BplE',
         label: 'IT'
       }
+    }
+  },
+  methods: {
+    getSelect() {
+      this.$emit('doSubmit', this.selectedPlan)
     }
   }
 }
