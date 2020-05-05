@@ -28,7 +28,7 @@ export default {
         hid: 'og:description',
         property: 'og:description',
         content:
-          'リモート飲み会に最適！通話しながらWeb上で開けば簡単に「Word wolf」を楽しむことができます！'
+          'リモート飲み会に最適！通話しながらWeb上で開けば簡単に「Word Wolf」を楽しむことができます！'
       },
       {
         hid: 'og:image',
@@ -38,7 +38,7 @@ export default {
       {
         hid: 'og:site_name',
         name: 'og:site_name',
-        content: 'リモートで「Word wolf」!'
+        content: 'リモートで「Word Wolf」!'
       }
     ]
   },
