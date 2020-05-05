@@ -66,33 +66,29 @@ export const actions = {
   // todo: エラーハンドリング / payload → stateからid取得
   // todo: トランザクション
   // isStartがfalseの時だけ呼び出せ
-  joinRoomAction({ commit, state }, payload) {
-    const update = state.room.guest.concat()
-    update.push(payload.formData)
+  joinRoomAction({ commit, _state }, payload) {
     const rooms = db.collection('rooms').doc(payload.id)
-    rooms.set({ guest: update })
-
     db.runTransaction((t) => {
       return t.get(rooms).then((doc) => {
-        const newPopulation = doc.data().population + 1
-        t.update(rooms, { population: newPopulation })
+        const updateGuest = doc.data().guest.concat(payload.formData)
+        t.update(rooms, { guest: updateGuest })
       })
     })
       .then((result) => {
-        console.log('Transaction success!')
+        console.log('Transaction success!', result)
+        // Cookieに保存
+        const cookies = new Cookies()
+        const user = {
+          ...payload.formData,
+          isOwner: false
+        }
+        cookies.set('roomId', payload.id)
+        cookies.set('user', JSON.stringify(user))
+        commit('setUserId', payload.formData.id)
       })
       .catch((err) => {
         console.log('Transaction failure:', err)
       })
-    commit('setUserId', payload.formData.id)
-    // Cookieに保存
-    const cookies = new Cookies()
-    const user = {
-      ...payload.formData,
-      isOwner: false
-    }
-    cookies.set('roomId', payload.id)
-    cookies.set('user', JSON.stringify(user))
   },
   async distributionThema({ _commit, state }, category) {
     let querySnapshot = await db.collection('themas').get()
