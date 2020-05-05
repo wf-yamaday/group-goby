@@ -1,23 +1,31 @@
 <template>
-  <v-list light>
-    <v-subheader>参加者リスト</v-subheader>
-    <v-list-item-group v-model="select">
-      <v-list-item v-for="user in users" :key="user.id">
-        <v-list-item-content>{{ user.name }}</v-list-item-content>
-      </v-list-item>
-    </v-list-item-group>
-    <div class="ma-2">
-      <v-btn
-        color="info"
-        :loading="isLoading"
-        :disabled="submitDisabled"
-        block
-        @click="doSubmit"
-      >
-        投票
-      </v-btn>
-    </div>
-  </v-list>
+  <v-card light>
+    <v-list light>
+      <v-subheader>参加者リスト</v-subheader>
+      <p class="caption px-3">
+        Wolfだと思う人を選択して投票ボタンを押してください．
+      </p>
+      <v-list-item-group v-model="select">
+        <v-list-item v-for="user in users" :key="user.id">
+          <v-list-item-content>{{ user.name }}</v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+      <div class="ma-2">
+        <v-btn
+          color="info"
+          :loading="isLoading"
+          :disabled="submitDisabled"
+          block
+          @click="doSubmit"
+        >
+          投票
+        </v-btn>
+        <p v-show="isLoading" class="overline text-center mt-2">
+          参加者全員が投票を終えたら，結果を表示します．
+        </p>
+      </div>
+    </v-list>
+  </v-card>
 </template>
 
 <script>

@@ -21,9 +21,9 @@
           参加者全員の準備が完了し，主催者がゲームを開始するまでお待ちください．
         </p>
       </v-card>
-      <v-dialog v-if="!isOwner" v-model="isFirst" persistent>
+      <div v-if="!isOwner && isFirst" persistent>
         <guest-join-form :room-name="room.name" @click="joinRoom" />
-      </v-dialog>
+      </div>
     </div>
 
     <!-- ゲーム開始後の画面 -->
@@ -69,6 +69,7 @@ import VoteResult from '~/components/VoteResult'
 import SelectCategory from '~/components/SelectCategory'
 
 export default {
+  middleware: 'vuex-cookie',
   components: {
     RoomNameAndLink,
     MemberList,
@@ -85,7 +86,6 @@ export default {
   },
   data() {
     return {
-      isFirst: true,
       isThemaShow: false,
       isVoteFormShow: false,
       selectedCategory: {
@@ -103,6 +103,9 @@ export default {
       categories: 'getCategories'
     }),
     ...mapState(['isOwner', 'userId']),
+    isFirst() {
+      return this.userId === ''
+    },
     canStart() {
       if (this.users.length < 3) {
         // 参加者が足りなければ始められない
@@ -130,7 +133,6 @@ export default {
         }
       }
       this.joinRoomAction(payload)
-      this.isFirst = false
     },
     ready() {
       this.readyAction()

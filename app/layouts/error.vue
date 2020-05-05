@@ -1,14 +1,24 @@
 <template>
   <v-content class="black--text">
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+    <v-card light>
+      <div class="text-center">
+        <v-icon class="mt-4 mb-2" x-large>mdi-alert</v-icon>
+        <p
+          v-if="error.statusCode === 404"
+          class="headline font-reguler pa-0 ma-0"
+        >
+          {{ pageNotFound }}
+        </p>
+        <p v-else class="headline font-reguler pa-0 ma-0">
+          {{ errorMesaage }}
+        </p>
+        <div class="pa-2">
+          <v-btn to="/" color="info" outlined block>
+            トップページに戻る
+          </v-btn>
+        </div>
+      </div>
+    </v-card>
   </v-content>
 </template>
 
@@ -24,7 +34,16 @@ export default {
   data() {
     return {
       pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
+      otherError: '内部エラーが発生しました'
+    }
+  },
+  computed: {
+    errorMesaage() {
+      if (this.error.message) {
+        return this.error.message
+      } else {
+        return this.otherError
+      }
     }
   },
   head() {
