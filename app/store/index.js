@@ -166,20 +166,28 @@ export const actions = {
   },
   // todo: トランザクション
   readyAction({ _commit, state }) {
-    const guest = state.room.guest
-    const update = guest.map((user) => {
-      if (user.id !== state.userId) {
-        return user
-      } else {
-        return {
-          ...user,
-          isReady: true
-        }
-      }
+    const rooms = db.collection('rooms').doc(state.room.id)
+    db.runTransaction((t) => {
+      return t.get(rooms).then((doc) => {
+        const updateGuest = doc.data().guest.map((user) => {
+          if (user.id !== state.userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isReady: true
+            }
+          }
+        })
+        t.update(rooms, { guest: updateGuest })
+      })
     })
-    db.collection('rooms')
-      .doc(state.room.id)
-      .update({ guest: update })
+      .then((result) => {
+        console.log('Transaction success!', result)
+      })
+      .catch((err) => {
+        console.log('Transaction failure:', err)
+      })
   },
   ownerReadyAction({ _commit, state }) {
     const ownerUpdata = {
