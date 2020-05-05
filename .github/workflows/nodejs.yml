@@ -19,14 +19,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Nuxt build & lint
-    uses: actions/cache@preview
-    with:
-      path: ./app/node_modules
-      key: ${{ matrix.os }}-frontend-${{ hashFiles('**/yarn.lock') }}
-      restore-keys: |
-        ${{ matrix.os }}-frontend-
-    - run: yarn
+      uses: actions/cache@v1
+      with:
+        path: ./app/node_modules
+        key: ${{ matrix.os }}-frontend-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ matrix.os }}-frontend-
+      - run: yarn
       working-directory: ./app
     - run: yarn lint
       working-directory: ./app
