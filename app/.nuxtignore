@@ -1,0 +1,4 @@
+# pages配下のadminを無視
+pages/admin/*
+# store配下のadminを無視
+store/admin.js
