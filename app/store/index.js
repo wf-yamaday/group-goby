@@ -180,7 +180,7 @@ export const actions = {
         t.update(room, { guest: updateGuest })
       })
     })
-      .then((result) => {
+      .then(() => {
         console.log('Transaction success!')
       })
       .catch((err) => {
