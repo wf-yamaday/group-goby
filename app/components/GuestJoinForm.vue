@@ -1,21 +1,23 @@
 <template>
-  <v-card light>
-    <v-card-title class="balck--text">
-      {{ roomName }}に参加します．
-    </v-card-title>
-    <v-card-text>
-      <v-text-field
-        v-model="formData.value"
-        :color="color"
-        :label="formData.label"
-        :rules="formData.rules"
-        :counter="16"
-      />
-      <v-btn :color="color" :disabled="submitDisabled" @click="handleClick"
-        >参加</v-btn
-      >
-    </v-card-text>
-  </v-card>
+  <v-dialog v-model="isShow" persistent>
+    <v-card light>
+      <v-card-title class="balck--text">
+        {{ roomName }}に参加します．
+      </v-card-title>
+      <v-card-text>
+        <v-text-field
+          v-model="formData.value"
+          :color="color"
+          :label="formData.label"
+          :rules="formData.rules"
+          :counter="16"
+        />
+        <v-btn :color="color" :disabled="submitDisabled" @click="handleClick"
+          >参加</v-btn
+        >
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -29,6 +31,7 @@ export default {
   data() {
     return {
       color: 'info',
+      isShow: true,
       formData: {
         label: '参加者名',
         value: '',
