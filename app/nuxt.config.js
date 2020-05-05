@@ -9,15 +9,36 @@ export default {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+      { hid: 'twitter:site', name: 'twitter:site', content: '@f_keychi_ktk' },
+      { hid: 'og:type', property: 'og:type', content: 'artcle' },
       {
-        hid: 'description',
-        name: 'description',
-        content: process.env.npm_package_description || ''
+        hid: 'og:title',
+        property: 'og:title',
+        content: '2020お家ハッカソンgroup-goby'
+      },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: 'https://gw-2020-hackathon-goby.web.app/'
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content:
+          'リモート飲みのときに最適！通話しながらWeb上でh開けば簡単に「Word wolf」を楽しむことができます！'
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'https://gw-2020-hackathon-goby.web.app/wolfman.png'
+      },
+      {
+        hid: 'og:site_name',
+        name: 'og:site_name',
+        content: 'リモートで「Word wolf」!'
       }
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    ]
   },
   /*
    ** Customize the progress-bar color
