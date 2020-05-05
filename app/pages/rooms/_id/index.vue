@@ -7,9 +7,9 @@
       <member-list :users="users" />
       <v-card v-if="isOwner" class="my-2" light>
         <select-category :categories="categories" @doSubmit="getSelected" />    
-          <v-btn color="info" :disabled="!canStart" block @click="startGame"
-            >ゲームを開始</v-btn
-          >
+        <v-btn color="info" :disabled="!canStart" block @click="startGame"
+          >ゲームを開始</v-btn
+        >
         </v-card-text>
 
       </v-card>
