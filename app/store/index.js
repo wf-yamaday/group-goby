@@ -204,6 +204,20 @@ const createStore = () => {
         } else {
           return user
         }
+      },
+      isVoted: (state) => {
+        if (!state.room.vote) {
+          return false
+        }
+        return state.room.vote.some((item) => item.key === state.userId)
+      },
+      getVoteResult: (state) => (id) => {
+        if (state.room.vote.length === 0) {
+          return -1
+        }
+        return state.room.vote.filter((item) => {
+          return item.select === id
+        }).length
       }
     }
   })
