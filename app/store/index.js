@@ -59,9 +59,21 @@ export const actions = {
   joinRoomAction({ commit, state }, payload) {
     const update = state.room.guest.concat()
     update.push(payload.formData)
-    db.collection('rooms')
-      .doc(payload.id)
-      .update({ guest: update })
+    const rooms = db.collection('rooms').doc(payload.id)
+    rooms.set({ guest: update })
+
+    db.runTransaction((t) => {
+      return t.get(rooms).then((doc) => {
+        const newPopulation = doc.data().population + 1
+        t.update(rooms, { population: newPopulation })
+      })
+    })
+      .then((result) => {
+        console.log('Transaction success!')
+      })
+      .catch((err) => {
+        console.log('Transaction failure:', err)
+      })
     commit('setUserId', payload.formData.id)
   },
   async distributionThema({ _commit, state }, category) {
@@ -163,6 +175,16 @@ export const actions = {
     db.collection('rooms')
       .doc(state.room.id)
       .update({ owner: ownerUpdata })
+  },
+  // todo: エラーハンドリング
+  reStartRoom({ _commit, state }) {
+    const reStart = {
+      ...state.room,
+      isStart: false
+    }
+    db.collection('rooms')
+      .doc(state.room.id)
+      .update({ isStart: reStart })
   },
   // todo: エラーハンドリング
   deleteRoom({ _commit, state }) {
