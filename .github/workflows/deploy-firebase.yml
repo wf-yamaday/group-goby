@@ -20,6 +20,14 @@ jobs:
         with:
           node-version: 12
 
+      - name: Cache node_modules
+        uses: actions/cache@preview
+        with:
+          path: ./app/node_modules
+          key: ubuntu-latest-deploy-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ubuntu-latest-deploy-
+
       - name: yarn install
         working-directory: ./app
         run: yarn

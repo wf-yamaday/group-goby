@@ -8,8 +8,9 @@
         item-value="value"
         :items="categories"
         label="カテゴリ選択"
-        soloi
+        solo
         return-object
+        @change="getSelect"
         :color="color"
         :menu-props="{ offsetY: true, light: true, color: color }"
         light
@@ -34,6 +35,11 @@ export default {
         id: '3ofwWE3XvWvlmY52BplE',
         label: 'IT'
       }
+    }
+  },
+  methods: {
+    getSelect() {
+      this.$emit('doSubmit', this.selectedPlan)
     }
   }
 }

@@ -7,7 +7,7 @@
       <member-list :users="users" />
       <v-card v-if="isOwner" class="my-2" light>
         <v-card-text>
-          <select-category :categories="categories" />
+          <select-category :categories="categories" @doSubmit="getSelected" />
           <v-btn color="info" :disabled="!canStart" block @click="startGame"
             >ゲームを開始</v-btn
           >
@@ -21,9 +21,9 @@
           参加者全員の準備が完了し，主催者がゲームを開始するまでお待ちください．
         </p>
       </v-card>
-      <v-dialog v-if="!isOwner" v-model="isFirst" persistent>
+      <div v-if="!isOwner && isFirst" persistent>
         <guest-join-form :room-name="room.name" @click="joinRoom" />
-      </v-dialog>
+      </div>
     </div>
 
     <!-- ゲーム開始後の画面 -->
@@ -59,6 +59,7 @@ import VoteResult from '~/components/VoteResult'
 import SelectCategory from '~/components/SelectCategory'
 
 export default {
+  middleware: 'vuex-cookie',
   components: {
     RoomNameAndLink,
     MemberList,
@@ -71,13 +72,13 @@ export default {
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
-    await store.dispatch('admin/setCategoriesRef')
+    await store.dispatch('setCategoriesRef')
   },
   data() {
     return {
-      isFirst: true,
       isThemaShow: false,
-      isVoteFormShow: false
+      isVoteFormShow: false,
+      selectedCategory: ''
     }
   },
   computed: {
@@ -86,9 +87,12 @@ export default {
       users: 'getUsers',
       user: 'getUser',
       isStart: 'isStart',
-      categories: 'admin/getCategories'
+      categories: 'getCategories'
     }),
     ...mapState(['isOwner', 'userId']),
+    isFirst() {
+      return this.userId === ''
+    },
     canStart() {
       if (this.users.length < 3) {
         // 参加者が足りなければ始められない
@@ -116,14 +120,13 @@ export default {
         }
       }
       this.joinRoomAction(payload)
-      this.isFirst = false
     },
     ready() {
       this.readyAction()
     },
-    startGame(categiryId) {
+    startGame() {
       if (this.canStart) {
-        this.startGameAction(categiryId)
+        this.startGameAction(this.selectedCategory)
         this.isThemaShow = true
       }
     },
@@ -139,6 +142,9 @@ export default {
     },
     voteWolf(selectUserId) {
       this.voteWolfAction(selectUserId)
+    },
+    getSelected(category) {
+      this.selectedCategory = category
     },
     ...mapActions([
       'joinRoomAction',

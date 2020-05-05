@@ -1,3 +1,4 @@
+import Cookies from 'universal-cookie'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import { db } from '~/plugins/firebase.js'
 
@@ -33,10 +34,22 @@ export const actions = {
     const res = await db.collection('rooms').add(payload)
     commit('setIsOwner')
     commit('setUserId', payload.owner.id)
+
+    // Cookieに保存
+    const cookies = new Cookies()
+    const user = {
+      ...payload.owner,
+      isOwner: true
+    }
+    cookies.set('roomId', res.id)
+    cookies.set('user', JSON.stringify(user))
     return res.id
   },
+  setCategoriesRef: firestoreAction(({ bindFirestoreRef }) => {
+    bindFirestoreRef('categories', db.collection('categories'))
+  }),
   // todo: エラーハンドリング
-  startGameAction({ _commit, dispatch, state }) {
+  startGameAction({ _commit, dispatch, state }, select) {
     const ownerUpdata = {
       ...state.room.owner,
       isReady: false
@@ -48,7 +61,8 @@ export const actions = {
       .doc(state.room.id)
       .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
     // 各ユーザーにテーマをセット
-    dispatch('distributionThema', '3ofwWE3XvWvlmY52BplE')
+    console.log(select.id)
+    dispatch('distributionThema', select.id)
   },
   // todo: エラーハンドリング / payload → stateからid取得
   // todo: トランザクション
@@ -60,6 +74,14 @@ export const actions = {
       .doc(payload.id)
       .update({ guest: update })
     commit('setUserId', payload.formData.id)
+    // Cookieに保存
+    const cookies = new Cookies()
+    const user = {
+      ...payload.formData,
+      isOwner: false
+    }
+    cookies.set('roomId', payload.id)
+    cookies.set('user', JSON.stringify(user))
   },
   async distributionThema({ _commit, state }, category) {
     let querySnapshot = await db.collection('themas').get()
@@ -208,6 +230,9 @@ export const getters = {
     } else {
       return user
     }
+  },
+  getCategories: (state) => {
+    return state.categories
   },
   isVoted: (state) => {
     if (!state.room.vote) {

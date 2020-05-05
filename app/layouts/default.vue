@@ -15,11 +15,23 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       title: 'GW 2020 Hackathon',
       color: 'info'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      room: 'getRoom'
+    })
+  },
+  head() {
+    const title = this.room ? this.room.name : 'GW 2020 Hackathon'
+    return {
+      title
     }
   }
 }
