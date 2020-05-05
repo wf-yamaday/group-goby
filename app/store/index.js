@@ -36,7 +36,7 @@ export const actions = {
     return res.id
   },
   // todo: エラーハンドリング
-  startGameAction({ _commit, dispatch, state }) {
+  startGameAction({ _commit, dispatch, state }, select) {
     const ownerUpdata = {
       ...state.room.owner,
       isReady: false
@@ -48,7 +48,8 @@ export const actions = {
       .doc(state.room.id)
       .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
     // 各ユーザーにテーマをセット
-    dispatch('distributionThema', '3ofwWE3XvWvlmY52BplE')
+    console.log(select.id)
+    dispatch('distributionThema', select.id)
   },
   // todo: エラーハンドリング / payload → stateからid取得
   // todo: トランザクション
