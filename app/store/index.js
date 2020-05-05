@@ -64,14 +64,13 @@ export const actions = {
     dispatch('distributionThema', select.id)
   },
   // todo: エラーハンドリング / payload → stateからid取得
-  // todo: トランザクション
   // isStartがfalseの時だけ呼び出せ
   joinRoomAction({ commit, _state }, payload) {
-    const rooms = db.collection('rooms').doc(payload.id)
+    const room = db.collection('rooms').doc(payload.id)
     db.runTransaction((t) => {
-      return t.get(rooms).then((doc) => {
+      return t.get(room).then((doc) => {
         const updateGuest = doc.data().guest.concat(payload.formData)
-        t.update(rooms, { guest: updateGuest })
+        t.update(room, { guest: updateGuest })
       })
     })
       .then((result) => {
@@ -164,22 +163,29 @@ export const actions = {
         .update({ guest: update, owner: ownerUpdate })
     }
   },
-  // todo: トランザクション
   readyAction({ _commit, state }) {
-    const guest = state.room.guest
-    const update = guest.map((user) => {
-      if (user.id !== state.userId) {
-        return user
-      } else {
-        return {
-          ...user,
-          isReady: true
-        }
-      }
+    const room = db.collection('rooms').doc(state.room.id)
+    db.runTransaction((t) => {
+      return t.get(room).then((doc) => {
+        const updateGuest = doc.data().guest.map((user) => {
+          if (user.id !== state.userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isReady: true
+            }
+          }
+        })
+        t.update(room, { guest: updateGuest })
+      })
     })
-    db.collection('rooms')
-      .doc(state.room.id)
-      .update({ guest: update })
+      .then(() => {
+        console.log('Transaction success!')
+      })
+      .catch((err) => {
+        console.log('Transaction failure:', err)
+      })
   },
   ownerReadyAction({ _commit, state }) {
     const ownerUpdata = {
