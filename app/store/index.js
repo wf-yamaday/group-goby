@@ -213,14 +213,22 @@ export const actions = {
       .delete()
   },
   voteWolfAction({ _commit, state }, selectUserId) {
-    const updateVote = [
-      ...state.room.vote,
-      { key: state.userId, select: selectUserId }
-    ]
-    db.collection('rooms')
-      .doc(state.room.id)
-      .update({
-        vote: updateVote
+    const room = db.collection('rooms').doc(state.room.id)
+    // 投票の操作にトランザクションを加える
+    db.runTransaction((t) => {
+      return t.get(room).then((doc) => {
+        const updateVote = doc.data().vote.concat({
+          key: state.userId,
+          select: selectUserId
+        })
+        t.update(room, { vote: updateVote })
+      })
+    })
+      .then(() => {
+        console.log('Transaction success!')
+      })
+      .catch((err) => {
+        console.log('Transaction failure:', err)
       })
   }
 }
