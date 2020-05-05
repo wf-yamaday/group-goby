@@ -64,7 +64,6 @@ export const actions = {
     dispatch('distributionThema', select.id)
   },
   // todo: エラーハンドリング / payload → stateからid取得
-  // todo: トランザクション
   // isStartがfalseの時だけ呼び出せ
   joinRoomAction({ commit, _state }, payload) {
     const room = db.collection('rooms').doc(payload.id)
@@ -164,7 +163,6 @@ export const actions = {
         .update({ guest: update, owner: ownerUpdate })
     }
   },
-  // todo: トランザクション
   readyAction({ _commit, state }) {
     const room = db.collection('rooms').doc(state.room.id)
     db.runTransaction((t) => {
