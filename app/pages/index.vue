@@ -15,6 +15,7 @@ export default {
     NewRoomForm
   },
   methods: {
+    // 要リファクタリング mapActionsを使う
     async doSubmit(data) {
       const payload = {
         name: data.roomName,
@@ -24,14 +25,12 @@ export default {
           isReady: true
         },
         guest: [],
-        isHire: true,
-        thema: [],
         isStart: false,
         isCounting: false,
-        vote: null
+        vote: []
       }
       const id = await this.$store.dispatch('postRoom', payload)
-      this.$router.push('/rooms/' + id)
+      this.$router.push(`/rooms/${id}`)
     },
     goRulePage() {
       this.$router.push('/rules')

@@ -60,7 +60,6 @@ export default {
   methods: {
     doSubmit() {
       this.isLoading = true
-      this.isLoading = false
       this.$emit('doSubmit', this.users[this.select].id)
     }
   }

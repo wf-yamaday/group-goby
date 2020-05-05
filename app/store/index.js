@@ -35,6 +35,7 @@ const createStore = () => {
       async postRoom({ commit }, payload) {
         const res = await db.collection('rooms').add(payload)
         commit('setIsOwner')
+        commit('setUserId', payload.owner.id)
         return res.id
       },
       // todo: エラーハンドリング
@@ -97,8 +98,8 @@ const createStore = () => {
             }
           })
           const ownerUpdate = {
+            ...owner,
             thema: wolfThema,
-            name: owner.name,
             isWolf: true
           }
           console.log(ownerUpdate)
@@ -123,8 +124,8 @@ const createStore = () => {
             }
           })
           const ownerUpdate = {
+            ...owner,
             thema: citizenThema,
-            name: owner.name,
             isWolf: false
           }
           db.collection('rooms')
@@ -163,6 +164,18 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .delete()
+      },
+      voteWolfAction({ _commit, state }, selectUserId) {
+        const updateVote = [
+          ...state.room.vote,
+          { key: state.userId, select: selectUserId }
+        ]
+        console.log(updateVote)
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({
+            vote: updateVote
+          })
       }
     },
     getters: {
@@ -191,6 +204,20 @@ const createStore = () => {
         } else {
           return user
         }
+      },
+      isVoted: (state) => {
+        if (!state.room.vote) {
+          return false
+        }
+        return state.room.vote.some((item) => item.key === state.userId)
+      },
+      getVoteResult: (state) => (id) => {
+        if (state.room.vote.length === 0) {
+          return -1
+        }
+        return state.room.vote.filter((item) => {
+          return item.select === id
+        }).length
       }
     }
   })
