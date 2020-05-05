@@ -48,7 +48,7 @@ export const actions = {
       .doc(state.room.id)
       .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
     // 各ユーザーにテーマをセット
-    dispatch('distributionThema')
+    dispatch('distributionThema', '3ofwWE3XvWvlmY52BplE')
   },
   // todo: エラーハンドリング / payload → stateからid取得
   // todo: トランザクション
@@ -61,8 +61,14 @@ export const actions = {
       .update({ guest: update })
     commit('setUserId', payload.formData.id)
   },
-  async distributionThema({ _commit, state }) {
-    const querySnapshot = await db.collection('themas').get()
+  async distributionThema({ _commit, state }, category) {
+    let querySnapshot = await db.collection('themas').get()
+    if (category) {
+      querySnapshot = await db
+        .collection('themas')
+        .where('id', '==', category)
+        .get()
+    }
     const themasSize = querySnapshot.size // 全テーマの数
     const randomThema = Math.floor(Math.random() * themasSize) // どのテーマを選ぶかの乱数
     const items = [] // dataの配列

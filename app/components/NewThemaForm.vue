@@ -23,7 +23,7 @@
           item-value="value"
           :items="categories"
           label="カテゴリ選択"
-          solo
+          soloi
           return-object
         />
         <v-btn
