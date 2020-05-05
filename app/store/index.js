@@ -61,27 +61,34 @@ export const actions = {
       .doc(state.room.id)
       .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
     // 各ユーザーにテーマをセット
-    console.log(select.id)
     dispatch('distributionThema', select.id)
   },
   // todo: エラーハンドリング / payload → stateからid取得
   // todo: トランザクション
   // isStartがfalseの時だけ呼び出せ
-  joinRoomAction({ commit, state }, payload) {
-    const update = state.room.guest.concat()
-    update.push(payload.formData)
-    db.collection('rooms')
-      .doc(payload.id)
-      .update({ guest: update })
-    commit('setUserId', payload.formData.id)
-    // Cookieに保存
-    const cookies = new Cookies()
-    const user = {
-      ...payload.formData,
-      isOwner: false
-    }
-    cookies.set('roomId', payload.id)
-    cookies.set('user', JSON.stringify(user))
+  joinRoomAction({ commit, _state }, payload) {
+    const rooms = db.collection('rooms').doc(payload.id)
+    db.runTransaction((t) => {
+      return t.get(rooms).then((doc) => {
+        const updateGuest = doc.data().guest.concat(payload.formData)
+        t.update(rooms, { guest: updateGuest })
+      })
+    })
+      .then((result) => {
+        console.log('Transaction success!', result)
+        // Cookieに保存
+        const cookies = new Cookies()
+        const user = {
+          ...payload.formData,
+          isOwner: false
+        }
+        cookies.set('roomId', payload.id)
+        cookies.set('user', JSON.stringify(user))
+        commit('setUserId', payload.formData.id)
+      })
+      .catch((err) => {
+        console.log('Transaction failure:', err)
+      })
   },
   async distributionThema({ _commit, state }, category) {
     let querySnapshot = await db.collection('themas').get()
@@ -127,7 +134,6 @@ export const actions = {
         thema: wolfThema,
         isWolf: true
       }
-      console.log(ownerUpdate)
       db.collection('rooms')
         .doc(state.room.id)
         .update({ guest: update, owner: ownerUpdate })
@@ -185,6 +191,16 @@ export const actions = {
       .update({ owner: ownerUpdata })
   },
   // todo: エラーハンドリング
+  reStartRoom({ _commit, state }) {
+    const reStart = {
+      ...state.room,
+      isStart: false
+    }
+    db.collection('rooms')
+      .doc(state.room.id)
+      .update({ isStart: reStart })
+  },
+  // todo: エラーハンドリング
   deleteRoom({ _commit, state }) {
     db.collection('rooms')
       .doc(state.room.id)
@@ -195,7 +211,6 @@ export const actions = {
       ...state.room.vote,
       { key: state.userId, select: selectUserId }
     ]
-    console.log(updateVote)
     db.collection('rooms')
       .doc(state.room.id)
       .update({

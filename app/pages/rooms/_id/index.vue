@@ -41,6 +41,16 @@
           @doSubmit="voteWolf"
         />
         <vote-result v-if="allUserVoted" :users="users" />
+        <v-card v-if="allUserVoted" class="my-2" light>
+          <v-card-text>
+            <v-btn color="info" block @click="reStartGame"
+              >ゲームを続ける</v-btn
+            >
+            <v-btn color="info" block @click="finishGame"
+              >ゲームを終了する</v-btn
+            >
+          </v-card-text>
+        </v-card>
       </div>
     </div>
   </div>
@@ -78,7 +88,10 @@ export default {
     return {
       isThemaShow: false,
       isVoteFormShow: false,
-      selectedCategory: ''
+      selectedCategory: {
+        id: '3ofwWE3XvWvlmY52BplE',
+        label: 'IT'
+      }
     }
   },
   computed: {
@@ -146,12 +159,21 @@ export default {
     getSelected(category) {
       this.selectedCategory = category
     },
+    reStartGame() {
+      this.reStartRoom()
+    },
+    finishGame() {
+      this.deleteRoom()
+      this.$router.push('/')
+    },
     ...mapActions([
       'joinRoomAction',
       'readyAction',
       'startGameAction',
       'ownerReadyAction',
-      'voteWolfAction'
+      'voteWolfAction',
+      'deleteRoom',
+      'reStartRoom'
     ])
   }
 }
