@@ -27,7 +27,15 @@
         :thema="user.thema"
         @click="themaChecked"
       />
-      <timer v-if="allUserChecked" />
+      <div v-if="allUserChecked">
+        <timer v-if="!isVoteFormShow && !allUserVoted" @endTimer="endTimer" />
+        <vote-wolf-form
+          v-show="isVoteFormShow && !allUserVoted"
+          :users="users"
+          @doSubmit="voteWolf"
+        />
+        <vote-result v-if="allUserVoted" :users="users" />
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +48,8 @@ import MemberList from '~/components/MemberList'
 import GuestJoinForm from '~/components/GuestJoinForm'
 import ThemaConfirmation from '~/components/ThemaConfirmation.vue'
 import Timer from '~/components/Timer'
+import VoteWolfForm from '~/components/VoteWolfForm'
+import VoteResult from '~/components/VoteResult'
 
 export default {
   components: {
@@ -47,7 +57,9 @@ export default {
     MemberList,
     GuestJoinForm,
     ThemaConfirmation,
-    Timer
+    Timer,
+    VoteWolfForm,
+    VoteResult
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
@@ -55,7 +67,8 @@ export default {
   data() {
     return {
       isFirst: true,
-      isThemaShow: false
+      isThemaShow: false,
+      isVoteFormShow: false
     }
   },
   computed: {
@@ -77,6 +90,9 @@ export default {
     },
     allUserChecked() {
       return !this.users.some((user) => user.isReady === false)
+    },
+    allUserVoted() {
+      return this.users.length === this.room.vote.length
     }
   },
   methods: {
@@ -108,11 +124,18 @@ export default {
         this.readyAction()
       }
     },
+    endTimer() {
+      this.isVoteFormShow = true
+    },
+    voteWolf(selectUserId) {
+      this.voteWolfAction(selectUserId)
+    },
     ...mapActions([
       'joinRoomAction',
       'readyAction',
       'startGameAction',
-      'ownerReadyAction'
+      'ownerReadyAction',
+      'voteWolfAction'
     ])
   }
 }
