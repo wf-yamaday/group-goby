@@ -12,7 +12,11 @@
           :rules="formData.rules"
           :counter="16"
         />
-        <v-btn :color="color" :disabled="submitDisabled" @click="handleClick"
+        <v-btn
+          :color="color"
+          :loading="isLoading"
+          :disabled="submitDisabled"
+          @click="handleClick"
           >参加</v-btn
         >
       </v-card-text>
@@ -32,6 +36,7 @@ export default {
     return {
       color: 'info',
       isShow: true,
+      isLoading: false,
       formData: {
         label: '参加者名',
         value: '',
@@ -51,6 +56,7 @@ export default {
   },
   methods: {
     handleClick() {
+      this.isLoading = true
       this.$emit('click', this.formData.value)
     }
   }
