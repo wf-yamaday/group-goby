@@ -6,15 +6,20 @@
     <div v-if="!isStart">
       <member-list :users="users" />
       <v-card v-if="isOwner" class="my-2" light>
-        <select-category :categories="categories" />
-        <v-btn color="info" :disabled="!canStart" block @click="startGame"
-          >ゲームを開始</v-btn
-        >
+        <v-card-text>
+          <select-category :categories="categories" />
+          <v-btn color="info" :disabled="!canStart" block @click="startGame"
+            >ゲームを開始</v-btn
+          >
+        </v-card-text>
       </v-card>
-      <v-card v-else class="my-2" light>
+      <v-card v-else class="my-2" color="grey lighten-5" flat light>
         <v-btn color="info" block :disabled="user.isReady" @click="ready"
           >準備完了</v-btn
         >
+        <p class="overline text-center mt-2" v-show="user.isReady">
+          参加者全員の準備が完了し，主催者がゲームを開始するまでお待ちください．
+        </p>
       </v-card>
       <v-dialog v-if="!isOwner" v-model="isFirst" persistent>
         <guest-join-form :room-name="room.name" @click="joinRoom" />
