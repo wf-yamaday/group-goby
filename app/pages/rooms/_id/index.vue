@@ -17,7 +17,7 @@
         <v-btn color="info" block :disabled="user.isReady" @click="ready"
           >準備完了</v-btn
         >
-        <p class="overline text-center mt-2" v-show="user.isReady">
+        <p v-show="user.isReady" class="overline text-center mt-2">
           参加者全員の準備が完了し，主催者がゲームを開始するまでお待ちください．
         </p>
       </v-card>
@@ -71,7 +71,7 @@ export default {
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
-    await store.dispatch('admin/setCategoriesRef')
+    await store.dispatch('setCategoriesRef')
   },
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
       users: 'getUsers',
       user: 'getUser',
       isStart: 'isStart',
-      categories: 'admin/getCategories'
+      categories: 'getCategories'
     }),
     ...mapState(['isOwner', 'userId']),
     canStart() {

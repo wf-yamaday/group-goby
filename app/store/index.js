@@ -35,6 +35,9 @@ export const actions = {
     commit('setUserId', payload.owner.id)
     return res.id
   },
+  setCategoriesRef: firestoreAction(({ bindFirestoreRef }) => {
+    bindFirestoreRef('categories', db.collection('categories'))
+  }),
   // todo: エラーハンドリング
   startGameAction({ _commit, dispatch, state }) {
     const ownerUpdata = {
@@ -208,6 +211,9 @@ export const getters = {
     } else {
       return user
     }
+  },
+  getCategories: (state) => {
+    return state.categories
   },
   isVoted: (state) => {
     if (!state.room.vote) {
