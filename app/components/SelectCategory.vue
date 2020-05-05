@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>カテゴリの選択</h2>
+    <p class="title black--text ma-0 pa-0 py-2">テーマのカテゴリを選択</p>
     <form>
       <v-select
         v-model="selectedPlan"
@@ -10,6 +10,9 @@
         label="カテゴリ選択"
         soloi
         return-object
+        :color="color"
+        :menu-props="{ offsetY: true, light: true, color: color }"
+        light
       />
     </form>
   </div>
