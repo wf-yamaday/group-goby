@@ -4,7 +4,7 @@
       {{ pageNotFound }}
     </h1>
     <h1 v-else>
-      {{ otherError }}
+      {{ errorMesaage }}
     </h1>
     <NuxtLink to="/">
       Home page
@@ -24,7 +24,16 @@ export default {
   data() {
     return {
       pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
+      otherError: '内部エラーが発生しました'
+    }
+  },
+  computed: {
+    errorMesaage() {
+      if (this.error.message) {
+        return this.error.message
+      } else {
+        return this.otherError
+      }
     }
   },
   head() {
