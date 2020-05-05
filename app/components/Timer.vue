@@ -49,7 +49,6 @@ export default {
       this.timerObj(this.timer)
     },
     stopTimer() {
-      console.log('stop')
       this.isRunning = false
       return window.clearInterval(this.timerId)
     },
@@ -64,7 +63,6 @@ export default {
       return window.clearInterval(this.timerId)
     },
     endTimer() {
-      console.log('test')
       this.$emit('endTimer') // ここでemitしてタイマーが終わったことを検知
     }
   }

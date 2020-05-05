@@ -51,7 +51,6 @@ export const actions = {
       .doc(state.room.id)
       .update({ isStart: true, owner: ownerUpdata, guest: guestUpdate })
     // 各ユーザーにテーマをセット
-    console.log(select.id)
     dispatch('distributionThema', select.id)
   },
   // todo: エラーハンドリング / payload → stateからid取得
@@ -109,7 +108,6 @@ export const actions = {
         thema: wolfThema,
         isWolf: true
       }
-      console.log(ownerUpdate)
       db.collection('rooms')
         .doc(state.room.id)
         .update({ guest: update, owner: ownerUpdate })
@@ -177,7 +175,6 @@ export const actions = {
       ...state.room.vote,
       { key: state.userId, select: selectUserId }
     ]
-    console.log(updateVote)
     db.collection('rooms')
       .doc(state.room.id)
       .update({

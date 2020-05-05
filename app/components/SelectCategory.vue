@@ -10,10 +10,10 @@
         label="カテゴリ選択"
         solo
         return-object
-        @change="getSelect"
         :color="color"
         :menu-props="{ offsetY: true, light: true, color: color }"
         light
+        @change="getSelect"
       />
     </form>
   </div>
