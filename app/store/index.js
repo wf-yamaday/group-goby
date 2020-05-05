@@ -98,8 +98,8 @@ const createStore = () => {
             }
           })
           const ownerUpdate = {
+            ...owner,
             thema: wolfThema,
-            name: owner.name,
             isWolf: true
           }
           console.log(ownerUpdate)
@@ -124,8 +124,8 @@ const createStore = () => {
             }
           })
           const ownerUpdate = {
+            ...owner,
             thema: citizenThema,
-            name: owner.name,
             isWolf: false
           }
           db.collection('rooms')
