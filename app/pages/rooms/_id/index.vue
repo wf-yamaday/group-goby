@@ -17,7 +17,7 @@
         <v-btn color="info" block :disabled="user.isReady" @click="ready"
           >準備完了</v-btn
         >
-        <p class="overline text-center mt-2" v-show="user.isReady">
+        <p v-show="user.isReady" class="overline text-center mt-2">
           参加者全員の準備が完了し，主催者がゲームを開始するまでお待ちください．
         </p>
       </v-card>
@@ -59,6 +59,7 @@ import VoteResult from '~/components/VoteResult'
 import SelectCategory from '~/components/SelectCategory'
 
 export default {
+  middleware: 'vuex-cookie',
   components: {
     RoomNameAndLink,
     MemberList,
