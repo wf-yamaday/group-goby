@@ -19,6 +19,7 @@ export const mutations = {
 }
 
 export const actions = {
+  // todo: エラーハンドリング
   setRoomsRef: firestoreAction(({ bindFirestoreRef }, ref) => {
     bindFirestoreRef('rooms', ref)
   }),

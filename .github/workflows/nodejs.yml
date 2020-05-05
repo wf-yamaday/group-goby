@@ -11,28 +11,32 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
+        os: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Nuxt build & lint
-      uses: actions/cache@v1
+    - name: Cache node_modules
+      uses: actions/cache@preview
       with:
         path: ./app/node_modules
-        key: ${{ matrix.os }}-frontend-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ matrix.os }}-build-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ matrix.os }}-frontend-
-    - run: yarn
+          ${{ matrix.os }}-build-
+    - name: Install Dependencies
       working-directory: ./app
-    - run: yarn lint
+      run: yarn
+    - name: Lint
       working-directory: ./app
-    - run: yarn build
+      run: yarn lint
+    - name: Build
       working-directory: ./app
+      run: yarn build
       env:
         FIREBASE_APIKEY: ${{ secrets.FIREBASE_API_KEY }}
         FIREBASE_AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
