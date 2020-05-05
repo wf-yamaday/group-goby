@@ -8,6 +8,8 @@
         v-model="formData.value"
         :color="color"
         :label="formData.label"
+        :rules="formData.rules"
+        :counter="16"
       />
       <v-btn :color="color" :disabled="submitDisabled" @click="handleClick"
         >参加</v-btn
@@ -29,7 +31,13 @@ export default {
       color: 'info',
       formData: {
         label: '参加者名',
-        value: ''
+        value: '',
+        rules: [
+          (value) => !!value || '必須です．',
+          (value) =>
+            (value && value.length <= 16) ||
+            `${this.formData.label}は最長16文字です．`
+        ]
       }
     }
   },
