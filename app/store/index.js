@@ -164,6 +164,18 @@ const createStore = () => {
         db.collection('rooms')
           .doc(state.room.id)
           .delete()
+      },
+      voteWolfAction({ _commit, state }, selectUserId) {
+        const updateVote = [
+          ...state.room.vote,
+          { key: state.userId, select: selectUserId }
+        ]
+        console.log(updateVote)
+        db.collection('rooms')
+          .doc(state.room.id)
+          .update({
+            vote: updateVote
+          })
       }
     },
     getters: {
