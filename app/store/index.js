@@ -35,6 +35,7 @@ const createStore = () => {
       async postRoom({ commit }, payload) {
         const res = await db.collection('rooms').add(payload)
         commit('setIsOwner')
+        commit('setUserId', payload.owner.id)
         return res.id
       },
       // todo: エラーハンドリング
