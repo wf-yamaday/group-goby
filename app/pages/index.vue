@@ -25,8 +25,6 @@ export default {
           isReady: true
         },
         guest: [],
-        isHire: true,
-        thema: [],
         isStart: false,
         isCounting: false,
         vote: []
