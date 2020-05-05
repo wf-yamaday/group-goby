@@ -11,26 +11,35 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node: [12.x]
+        os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Nuxt build & lint
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: yarn
-      working-directory: ./app
-    - run: yarn lint
-      working-directory: ./app
-    - run: yarn build
-      working-directory: ./app
-      env:
-        FIREBASE_APIKEY: ${{ secrets.FIREBASE_API_KEY }}
-        FIREBASE_AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
-        FIREBASE_DATABASEURL: ${{ secrets.FIREBASE_DATABASEURL }}
-        FIREBASE_PROJECTID: ${{ secrets.FIREBASE_PROJECTID }}
+      - uses: actions/checkout@v2
+
+      - name: Cache node_modules
+        uses: actions/cache@preview
+        with:
+          path: ./app/node_modules
+          key: ${{ matrix.os }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ matrix.os }}-build-
+      
+      - name: Install Dependencies
+        working-directory: ./app
+        run: yarn
+      - name: Lint
+        working-directory: ./app
+        run: yarn lint
+      - name: Build
+        working-directory: ./app
+        run: yarn build
+        env:
+          FIREBASE_APIKEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
+          FIREBASE_DATABASEURL: ${{ secrets.FIREBASE_DATABASEURL }}
+          FIREBASE_PROJECTID: ${{ secrets.FIREBASE_PROJECTID }}
