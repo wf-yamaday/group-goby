@@ -67,11 +67,11 @@ export const actions = {
   // todo: トランザクション
   // isStartがfalseの時だけ呼び出せ
   joinRoomAction({ commit, _state }, payload) {
-    const rooms = db.collection('rooms').doc(payload.id)
+    const room = db.collection('rooms').doc(payload.id)
     db.runTransaction((t) => {
-      return t.get(rooms).then((doc) => {
+      return t.get(room).then((doc) => {
         const updateGuest = doc.data().guest.concat(payload.formData)
-        t.update(rooms, { guest: updateGuest })
+        t.update(room, { guest: updateGuest })
       })
     })
       .then((result) => {
@@ -166,9 +166,9 @@ export const actions = {
   },
   // todo: トランザクション
   readyAction({ _commit, state }) {
-    const rooms = db.collection('rooms').doc(state.room.id)
+    const room = db.collection('rooms').doc(state.room.id)
     db.runTransaction((t) => {
-      return t.get(rooms).then((doc) => {
+      return t.get(room).then((doc) => {
         const updateGuest = doc.data().guest.map((user) => {
           if (user.id !== state.userId) {
             return user
@@ -179,11 +179,11 @@ export const actions = {
             }
           }
         })
-        t.update(rooms, { guest: updateGuest })
+        t.update(room, { guest: updateGuest })
       })
     })
       .then((result) => {
-        console.log('Transaction success!', result)
+        console.log('Transaction success!')
       })
       .catch((err) => {
         console.log('Transaction failure:', err)
