@@ -72,7 +72,7 @@ export default {
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
-    await store.dispatch('admin/setCategoriesRef')
+    await store.dispatch('setCategoriesRef')
   },
   data() {
     return {
@@ -87,7 +87,7 @@ export default {
       users: 'getUsers',
       user: 'getUser',
       isStart: 'isStart',
-      categories: 'admin/getCategories'
+      categories: 'getCategories'
     }),
     ...mapState(['isOwner', 'userId']),
     isFirst() {
