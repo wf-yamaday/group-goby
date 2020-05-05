@@ -1,11 +1,11 @@
 <template>
   <v-card light>
     <div class="text-center">
-      <p class="display-1 font-reguler py-4">
+      <p class="display-1 font-reguler pa-0 ma-0 pt-4">
         Word Wolfのルール
       </p>
       <img width="150" height="180" src="/wolfman.png" />
-      <p class="subtitile-1 px-4">
+      <p class="subtitile-1 ma-0 px-4 mb-0">
         &#8220;お題が異なる一人を見つけましょう.&#8221;
       </p>
     </div>

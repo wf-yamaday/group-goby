@@ -55,7 +55,7 @@ export const actions = {
   // todo: トランザクション
   // isStartがfalseの時だけ呼び出せ
   joinRoomAction({ commit, state }, payload) {
-    const update = state.room.guest
+    const update = state.room.guest.concat()
     update.push(payload.formData)
     db.collection('rooms')
       .doc(payload.id)

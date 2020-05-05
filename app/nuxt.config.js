@@ -9,6 +9,8 @@ export default {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
     meta: [
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
       { hid: 'twitter:site', name: 'twitter:site', content: '@f_keychi_ktk' },
       { hid: 'og:type', property: 'og:type', content: 'artcle' },
@@ -26,7 +28,7 @@ export default {
         hid: 'og:description',
         property: 'og:description',
         content:
-          'リモート飲みのときに最適！通話しながらWeb上でh開けば簡単に「Word wolf」を楽しむことができます！'
+          'リモート飲み会に最適！通話しながらWeb上で開けば簡単に「Word wolf」を楽しむことができます！'
       },
       {
         hid: 'og:image',
