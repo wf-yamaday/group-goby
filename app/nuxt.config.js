@@ -26,17 +26,17 @@ export default {
         hid: 'og:description',
         property: 'og:description',
         content:
-          'リモート飲みのときに最適 ！通話しながらWeb情でひらけば，簡単に「Word wolf」を楽しむことができます！'
+          'リモート飲みのときに最適！通話しながらWeb上でh開けば簡単に「Word wolf」を楽しむことができます！'
       },
       {
         hid: 'og:image',
         property: 'og:image',
-        content: './static/wolfman.png'
+        content: 'https://gw-2020-hackathon-goby.web.app/wolfman.png'
       },
       {
         hid: 'og:site_name',
         name: 'og:site_name',
-        content: 'リモートでで「Word wolf」!'
+        content: 'リモートで「Word wolf」!'
       }
     ]
   },
