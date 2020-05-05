@@ -27,7 +27,7 @@ jobs:
         key: ${{ matrix.os }}-frontend-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ matrix.os }}-frontend-
-      - run: yarn
+    - run: yarn
       working-directory: ./app
     - run: yarn lint
       working-directory: ./app
