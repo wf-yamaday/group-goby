@@ -222,5 +222,26 @@ export const getters = {
     return state.room.vote.filter((item) => {
       return item.select === id
     }).length
+  },
+  // 勝敗判定関数 return true => wolfの負け
+  isWolfJudged: (state) => {
+    const users = getters.getUsers(state)
+
+    const wolfUser = users.find((user) => user.isWolf)
+
+    const getVoteResult = getters.getVoteResult(state)
+    const voteResult = users.map((user) => {
+      return {
+        id: user.id,
+        voteNum: getVoteResult(user.id)
+      }
+    })
+    const judgeUsers = voteResult.filter(
+      (user) =>
+        user.voteNum ===
+        Math.max.apply(null, [...voteResult.map((user) => user.voteNum)])
+    )
+
+    return judgeUsers.some((user) => user.id === wolfUser.id)
   }
 }

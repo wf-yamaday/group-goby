@@ -1,9 +1,14 @@
 <template>
-  <div class="black--text">
-    <h2>{{ name }}</h2>
-    <p id="link" class="red--text font-weight-light">{{ sharedLink }}</p>
-    <v-btn color="info" icon @click="copyLink">
-      <v-icon dark>mdi-content-copy</v-icon>
+  <div class="black--text pb-2">
+    <p class="headline mt-1 mb-0">
+      {{ name }}
+    </p>
+    <p id="link" class="red--text text--darken-3 font-weight-light mb-1">
+      {{ sharedLink }}
+    </p>
+    <v-btn color="info" small outlined @click="copyLink">
+      <v-icon small>mdi-content-copy</v-icon>
+      コピー
     </v-btn>
     <v-snackbar v-model="snackbar" :timeout="timeout">
       {{ text }}
@@ -53,3 +58,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#link {
+  text-decoration: underline;
+}
+</style>
