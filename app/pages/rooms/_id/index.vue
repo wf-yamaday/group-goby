@@ -6,6 +6,7 @@
     <div v-if="!isStart">
       <member-list :users="users" />
       <v-card v-if="isOwner" class="my-2" light>
+        <select-category :categories="categories" />
         <v-btn color="info" :disabled="!canStart" block @click="startGame"
           >ゲームを開始</v-btn
         >
@@ -50,6 +51,7 @@ import ThemaConfirmation from '~/components/ThemaConfirmation.vue'
 import Timer from '~/components/Timer'
 import VoteWolfForm from '~/components/VoteWolfForm'
 import VoteResult from '~/components/VoteResult'
+import SelectCategory from '~/components/SelectCategory'
 
 export default {
   components: {
@@ -59,10 +61,12 @@ export default {
     ThemaConfirmation,
     Timer,
     VoteWolfForm,
-    VoteResult
+    VoteResult,
+    SelectCategory
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
+    await store.dispatch('admin/setCategoriesRef')
   },
   data() {
     return {
@@ -76,7 +80,8 @@ export default {
       room: 'getRoom',
       users: 'getUsers',
       user: 'getUser',
-      isStart: 'isStart'
+      isStart: 'isStart',
+      categories: 'admin/getCategories'
     }),
     ...mapState(['isOwner', 'userId']),
     canStart() {
@@ -111,9 +116,9 @@ export default {
     ready() {
       this.readyAction()
     },
-    startGame() {
+    startGame(categiryId) {
       if (this.canStart) {
-        this.startGameAction()
+        this.startGameAction(categiryId)
         this.isThemaShow = true
       }
     },
