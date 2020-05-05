@@ -1,3 +1,4 @@
+import Cookies from 'universal-cookie'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import { db } from '~/plugins/firebase.js'
 
@@ -33,6 +34,15 @@ export const actions = {
     const res = await db.collection('rooms').add(payload)
     commit('setIsOwner')
     commit('setUserId', payload.owner.id)
+
+    // Cookieに保存
+    const cookies = new Cookies()
+    const user = {
+      ...payload.owner,
+      isOwner: true
+    }
+    cookies.set('roomId', res.id)
+    cookies.set('user', JSON.stringify(user))
     return res.id
   },
   setCategoriesRef: firestoreAction(({ bindFirestoreRef }) => {
@@ -64,6 +74,14 @@ export const actions = {
       .doc(payload.id)
       .update({ guest: update })
     commit('setUserId', payload.formData.id)
+    // Cookieに保存
+    const cookies = new Cookies()
+    const user = {
+      ...payload.formData,
+      isOwner: false
+    }
+    cookies.set('roomId', payload.id)
+    cookies.set('user', JSON.stringify(user))
   },
   async distributionThema({ _commit, state }, category) {
     let querySnapshot = await db.collection('themas').get()
