@@ -1,9 +1,9 @@
 <template>
-  <v-card width="360" light align="center">
-    <v-card-title class="justify-center">タイマー</v-card-title>
+  <v-card light align="center">
+    <v-card-title class="justify-center">残り時間</v-card-title>
     <v-card-text>
       <h1 class="time">{{ minutes }}:{{ seconds }}</h1>
-      <v-btn v-if="isRunning === false" @click="startTimer()">◀︎</v-btn>
+      <v-btn v-if="!isRunning" @click="startTimer()">◀︎</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -49,7 +49,6 @@ export default {
       this.timerObj(this.timer)
     },
     stopTimer() {
-      this.isRunning = false
       return window.clearInterval(this.timerId)
     },
     resetTimer() {
