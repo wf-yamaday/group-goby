@@ -132,7 +132,7 @@ export default {
       return this.users.length === this.room.vote.length
     },
     finishRoomChecked() {
-      return this.room.isFinish === true
+      return this.room.isFinish
     }
   },
   methods: {
