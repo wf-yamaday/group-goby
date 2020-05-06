@@ -93,7 +93,7 @@ export default {
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
-    await store.dispatch('setCategories')
+    await store.dispatch('setCategoriesRef')
   },
   data() {
     return {
