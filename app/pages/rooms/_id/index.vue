@@ -33,36 +33,46 @@
         :thema="user.thema"
         @click="themaChecked"
       />
+      <!-- 参加者全員の準備完了後 -->
       <div v-if="allUserChecked">
-        <timer v-if="!isVoteFormShow && !allUserVoted" @endTimer="endTimer" />
+        <timer v-if="!isVoting && !allUserVoted" @endTimer="endTimer" />
         <vote-wolf-form
-          v-show="isVoteFormShow && !allUserVoted"
+          v-show="isVoting && !allUserVoted"
           :users="users"
           @doSubmit="voteWolf"
         />
         <vote-result v-if="allUserVoted" :users="users" />
-        <v-card v-if="allUserVoted" class="my-2" light>
-          <v-card-text>
-            <div v-if="isOwner" persistent>
-              <p>
-                <v-btn color="info" block @click="reStartGame"
-                  >ゲームを続ける</v-btn
-                >
-              </p>
-              <p>
-                <v-btn color="error" block @click="finishGame"
-                  >ゲームを終了する</v-btn
-                >
-              </p>
-            </div>
-          </v-card-text>
+        <v-card
+          v-if="allUserVoted"
+          class="my-2"
+          color="grey lighten-5"
+          flat
+          light
+        >
+          <div v-if="isOwner" persistent>
+            <p>
+              <v-btn color="info" block @click="reStartGame"
+                >ゲームを続ける</v-btn
+              >
+            </p>
+            <p>
+              <v-btn color="error" outlined block @click="finishGame"
+                >ゲームを終了する</v-btn
+              >
+            </p>
+          </div>
+          <div v-else>
+            <p class="overline text-center mt-2">
+              主催者が操作するまでお待ちください．
+            </p>
+          </div>
         </v-card>
       </div>
     </div>
 
     <!-- ゲームが終了(ルームを退出)するとき-->
-    <div v-if="finishRoomChecked">
-      <!-- ここでdialog-->
+    <div v-if="isFinished">
+      <finish-room-dialog />
     </div>
   </div>
 </template>
@@ -78,6 +88,7 @@ import Timer from '~/components/Timer'
 import VoteWolfForm from '~/components/VoteWolfForm'
 import VoteResult from '~/components/VoteResult'
 import SelectCategory from '~/components/SelectCategory'
+import FinishRoomDialog from '~/components/FinishRoomDialog'
 
 export default {
   middleware: 'vuex-cookie',
@@ -89,7 +100,8 @@ export default {
     Timer,
     VoteWolfForm,
     VoteResult,
-    SelectCategory
+    SelectCategory,
+    FinishRoomDialog
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
@@ -110,6 +122,7 @@ export default {
       users: 'getUsers',
       user: 'getUser',
       isStart: 'isStart',
+      isVoting: 'isVoting',
       categories: 'getCategories'
     }),
     ...mapState(['isOwner', 'userId']),
@@ -131,7 +144,7 @@ export default {
     allUserVoted() {
       return this.users.length === this.room.vote.length
     },
-    finishRoomChecked() {
+    isFinished() {
       return this.room.isFinish
     }
   },
@@ -163,7 +176,9 @@ export default {
       }
     },
     endTimer() {
-      this.isVoteFormShow = true
+      if (this.isOwner) {
+        this.isVotingToTrueAction()
+      }
     },
     voteWolf(selectUserId) {
       this.voteWolfAction(selectUserId)
@@ -171,7 +186,7 @@ export default {
     getSelected(category) {
       this.selectedCategory = category
     },
-    reStartGame() {
+    restartGame() {
       this.reStartRoom()
     },
     finishGame() {
@@ -183,9 +198,10 @@ export default {
       'readyAction',
       'startGameAction',
       'ownerReadyAction',
+      'isVotingToTrueAction',
       'voteWolfAction',
       'finishRoom',
-      'reStartRoom'
+      'restartRoom'
     ])
   }
 }

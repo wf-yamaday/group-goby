@@ -10,7 +10,7 @@
           {{ pageNotFound }}
         </p>
         <p v-else class="headline font-reguler pa-0 ma-0">
-          {{ errorMesaage }}
+          {{ otherError }}
         </p>
         <div class="pa-2">
           <v-btn to="/" color="info" outlined block>

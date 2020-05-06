@@ -196,14 +196,24 @@ export const actions = {
       .doc(state.room.id)
       .update({ owner: ownerUpdata })
   },
+  isVotingToTrueAction({ _commit, state }) {
+    db.collection('rooms')
+      .doc(state.room.id)
+      .update({ isVoting: true })
+  },
   // todo: エラーハンドリング
-  reStartRoom({ _commit, state }) {
+  restartRoom({ _commit, state }) {
     const guestRestart = state.room.guest.map((user) => {
       return { ...user, isReady: false, thema: '' }
     })
     db.collection('rooms')
       .doc(state.room.id)
-      .update({ isStart: false, guest: guestRestart, vote: [] })
+      .update({
+        isStart: false,
+        isVoting: false,
+        guest: guestRestart,
+        vote: []
+      })
   },
   // todo: エラーハンドリング
   finishRoom({ _commit, state }) {
@@ -252,6 +262,9 @@ export const getters = {
   },
   isStart: (state) => {
     return state.room.isStart
+  },
+  isVoting: (state) => {
+    return state.room.isVoting
   },
   // userIdから自分の状態を取得
   getUser: (state) => {
