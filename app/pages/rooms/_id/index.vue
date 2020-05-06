@@ -51,7 +51,7 @@
         >
           <div v-if="isOwner" persistent>
             <p>
-              <v-btn color="info" block @click="reStartGame"
+              <v-btn color="info" block @click="restartGame"
                 >ゲームを続ける</v-btn
               >
             </p>
