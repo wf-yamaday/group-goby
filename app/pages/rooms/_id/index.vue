@@ -72,7 +72,7 @@
 
     <!-- ゲームが終了(ルームを退出)するとき-->
     <div v-if="isFinished">
-      <!-- ここでdialog-->
+      <finish-room-dialog />
     </div>
   </div>
 </template>
@@ -88,6 +88,7 @@ import Timer from '~/components/Timer'
 import VoteWolfForm from '~/components/VoteWolfForm'
 import VoteResult from '~/components/VoteResult'
 import SelectCategory from '~/components/SelectCategory'
+import FinishRoomDialog from '~/components/FinishRoomDialog'
 
 export default {
   middleware: 'vuex-cookie',
@@ -99,7 +100,8 @@ export default {
     Timer,
     VoteWolfForm,
     VoteResult,
-    SelectCategory
+    SelectCategory,
+    FinishRoomDialog
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
