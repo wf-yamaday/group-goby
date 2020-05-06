@@ -187,7 +187,7 @@ export default {
       this.selectedCategory = category
     },
     restartGame() {
-      this.reStartRoom()
+      this.restartRoom()
     },
     finishGame() {
       this.finishRoom()
