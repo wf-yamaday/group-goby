@@ -13,9 +13,9 @@ export default {
   data() {
     return {
       timerId: '',
-      timer: 180,
-      duration: 180,
-      minutes: 3,
+      timer: 60,
+      duration: 60,
+      minutes: 1,
       seconds: 0,
       isRunning: false
     }
@@ -54,8 +54,8 @@ export default {
     },
     resetTimer() {
       this.isRunning = false
-      this.timer = 180 // 3min default
-      this.duration = 180
+      this.timer = 60 // 3min default
+      this.duration = 60
       this.minutes = parseInt(this.timer / 60, 10)
       this.seconds = parseInt(this.timer % 60, 10)
       this.minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes
