@@ -104,8 +104,9 @@ export default {
     FinishRoomDialog
   },
   async fetch({ store, route }) {
-    await store.dispatch('setRoomRef', route.params.id)
-    await store.dispatch('setCategoriesRef')
+    const room = store.dispatch('setRoomRef', route.params.id)
+    const categories = store.dispatch('setCategoriesRef')
+    await Promise.all([room, categories])
   },
   data() {
     return {
@@ -149,7 +150,7 @@ export default {
     }
   },
   methods: {
-    joinRoom(guestName) {
+    async joinRoom(guestName) {
       const payload = {
         id: this.$route.params.id,
         formData: {
@@ -158,7 +159,7 @@ export default {
           isReady: false
         }
       }
-      this.joinRoomAction(payload)
+      await this.joinRoomAction(payload)
     },
     ready() {
       this.readyAction()
