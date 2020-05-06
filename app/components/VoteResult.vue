@@ -25,10 +25,10 @@
                   <span v-show="user.isWolf">&#x1f43a;</span>
                   <span v-show="!user.isWolf">&#x1f6e1;</span>
                 </v-list-item-icon>
-                <v-list-item-title :class="{ 'red--text': user.isWolf }">
-                  {{ user.name }}
-                </v-list-item-title>
-                <v-spacer></v-spacer>
+                <v-list-item-title :class="{ 'red--text': user.isWolf }">{{
+                  user.name
+                }}</v-list-item-title>
+                <v-spacer />
               </template>
               <v-list-item>
                 <span class="pl-10">{{ user.thema }}</span>
