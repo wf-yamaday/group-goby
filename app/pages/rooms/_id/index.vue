@@ -43,12 +43,18 @@
         <vote-result v-if="allUserVoted" :users="users" />
         <v-card v-if="allUserVoted" class="my-2" light>
           <v-card-text>
-            <v-btn color="info" block @click="reStartGame"
-              >ゲームを続ける</v-btn
-            >
-            <v-btn color="info" block @click="finishGame"
-              >ゲームを終了する</v-btn
-            >
+            <div v-if="isOwner" persistent>
+              <p>
+                <v-btn color="info" block @click="reStartGame"
+                  >ゲームを続ける</v-btn
+                >
+              </p>
+              <p>
+                <v-btn color="danger" block @click="finishGame"
+                  >ゲームを終了する</v-btn
+                >
+              </p>
+            </div>
           </v-card-text>
         </v-card>
       </div>

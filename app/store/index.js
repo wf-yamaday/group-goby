@@ -74,7 +74,7 @@ export const actions = {
       })
     })
       .then((result) => {
-        console.log('Transaction success!', result)
+        console.log('Transaction success!')
         // Cookieに保存
         const cookies = new Cookies()
         const user = {
@@ -198,13 +198,12 @@ export const actions = {
   },
   // todo: エラーハンドリング
   reStartRoom({ _commit, state }) {
-    const reStart = {
-      ...state.room,
-      isStart: false
-    }
+    const guestRestart = state.room.guest.map((user) => {
+      return { ...user, isReady: false }
+    })
     db.collection('rooms')
       .doc(state.room.id)
-      .update({ isStart: reStart })
+      .update({ isStart: false, guest: guestRestart })
   },
   // todo: エラーハンドリング
   deleteRoom({ _commit, state }) {
