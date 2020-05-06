@@ -287,7 +287,12 @@ export const getters = {
     if (guest.length === 0) {
       return { isReady: false }
     } else {
-      return guest.find((user) => user.id === state.userId)
+      const user = guest.find((user) => user.id === state.userId)
+      if (!user) {
+        return { isReady: false }
+      } else {
+        return user
+      }
     }
   },
   getCategories: (state) => {
