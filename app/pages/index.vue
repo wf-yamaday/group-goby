@@ -27,7 +27,8 @@ export default {
         guest: [],
         isStart: false,
         vote: [],
-        isFinish: false
+        isFinish: false,
+        isVoting: false
       }
       const id = await this.$store.dispatch('postRoom', payload)
       this.$router.push(`/rooms/${id}`)
