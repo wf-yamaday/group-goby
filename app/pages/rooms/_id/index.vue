@@ -37,7 +37,7 @@
       <div v-if="allUserChecked">
         <timer v-if="!isVoting && !allUserVoted" @endTimer="endTimer" />
         <vote-wolf-form
-          v-show="isVoting && !allUserVoted"
+          v-if="isVoting && !allUserVoted"
           :users="users"
           @doSubmit="voteWolf"
         />
