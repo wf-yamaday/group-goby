@@ -3,7 +3,6 @@
     <v-card-title class="justify-center">残り時間</v-card-title>
     <v-card-text>
       <h1 class="time">{{ minutes }}:{{ seconds }}</h1>
-      <v-btn v-if="!isRunning" @click="startTimer()">◀︎</v-btn>
     </v-card-text>
   </v-card>
 </template>
