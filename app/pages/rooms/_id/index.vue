@@ -43,15 +43,26 @@
         <vote-result v-if="allUserVoted" :users="users" />
         <v-card v-if="allUserVoted" class="my-2" light>
           <v-card-text>
-            <v-btn color="info" block @click="reStartGame"
-              >ゲームを続ける</v-btn
-            >
-            <v-btn color="info" block @click="finishGame"
-              >ゲームを終了する</v-btn
-            >
+            <div v-if="isOwner" persistent>
+              <p>
+                <v-btn color="info" block @click="reStartGame"
+                  >ゲームを続ける</v-btn
+                >
+              </p>
+              <p>
+                <v-btn color="error" block @click="finishGame"
+                  >ゲームを終了する</v-btn
+                >
+              </p>
+            </div>
           </v-card-text>
         </v-card>
       </div>
+    </div>
+
+    <!-- ゲームが終了(ルームを退出)するとき-->
+    <div v-if="finishRoomChecked">
+      <!-- ここでdialog-->
     </div>
   </div>
 </template>
@@ -86,7 +97,6 @@ export default {
   },
   data() {
     return {
-      isThemaShow: false,
       isVoteFormShow: false,
       selectedCategory: {
         id: '3ofwWE3XvWvlmY52BplE',
@@ -120,6 +130,9 @@ export default {
     },
     allUserVoted() {
       return this.users.length === this.room.vote.length
+    },
+    finishRoomChecked() {
+      return this.room.isFinish
     }
   },
   methods: {
@@ -140,7 +153,6 @@ export default {
     startGame() {
       if (this.canStart) {
         this.startGameAction(this.selectedCategory)
-        this.isThemaShow = true
       }
     },
     themaChecked() {
@@ -163,7 +175,7 @@ export default {
       this.reStartRoom()
     },
     finishGame() {
-      this.deleteRoom()
+      this.finishRoom()
       this.$router.push('/')
     },
     ...mapActions([
@@ -172,7 +184,7 @@ export default {
       'startGameAction',
       'ownerReadyAction',
       'voteWolfAction',
-      'deleteRoom',
+      'finishRoom',
       'reStartRoom'
     ])
   }
