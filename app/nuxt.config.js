@@ -6,7 +6,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    titleTemplate: '%s - ' + 'Group Goby',
     title: process.env.npm_package_name || '',
     link: [{ rel: 'icon', type: 'image/png', href: '/favicon.png' }],
     meta: [
