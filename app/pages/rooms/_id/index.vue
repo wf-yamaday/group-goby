@@ -50,7 +50,7 @@
                 >
               </p>
               <p>
-                <v-btn color="eroor" block @click="finishGame"
+                <v-btn color="error" block @click="finishGame"
                   >ゲームを終了する</v-btn
                 >
               </p>
