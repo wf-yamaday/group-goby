@@ -50,7 +50,7 @@
                 >
               </p>
               <p>
-                <v-btn color="danger" block @click="finishGame"
+                <v-btn color="eroor" block @click="finishGame"
                   >ゲームを終了する</v-btn
                 >
               </p>
@@ -58,6 +58,11 @@
           </v-card-text>
         </v-card>
       </div>
+    </div>
+
+    <!-- ゲームが終了(ルームを退出)するとき-->
+    <div v-if="finishRoomChecked">
+      <!-- ここでdialog-->
     </div>
   </div>
 </template>
@@ -88,11 +93,10 @@ export default {
   },
   async fetch({ store, route }) {
     await store.dispatch('setRoomRef', route.params.id)
-    await store.dispatch('setCategoriesRef')
+    await store.dispatch('setCategories')
   },
   data() {
     return {
-      isThemaShow: false,
       isVoteFormShow: false,
       selectedCategory: {
         id: '3ofwWE3XvWvlmY52BplE',
@@ -126,6 +130,9 @@ export default {
     },
     allUserVoted() {
       return this.users.length === this.room.vote.length
+    },
+    finishRoomChecked() {
+      return this.room.isFinish === true
     }
   },
   methods: {
@@ -146,7 +153,6 @@ export default {
     startGame() {
       if (this.canStart) {
         this.startGameAction(this.selectedCategory)
-        this.isThemaShow = true
       }
     },
     themaChecked() {
@@ -169,7 +175,7 @@ export default {
       this.reStartRoom()
     },
     finishGame() {
-      this.deleteRoom()
+      this.finishRoom()
       this.$router.push('/')
     },
     ...mapActions([
@@ -178,7 +184,7 @@ export default {
       'startGameAction',
       'ownerReadyAction',
       'voteWolfAction',
-      'deleteRoom',
+      'finishRoom',
       'reStartRoom'
     ])
   }

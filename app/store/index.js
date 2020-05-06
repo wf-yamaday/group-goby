@@ -199,11 +199,17 @@ export const actions = {
   // todo: エラーハンドリング
   reStartRoom({ _commit, state }) {
     const guestRestart = state.room.guest.map((user) => {
-      return { ...user, isReady: false }
+      return { ...user, isReady: false, thema: '' }
     })
     db.collection('rooms')
       .doc(state.room.id)
-      .update({ isStart: false, guest: guestRestart })
+      .update({ isStart: false, guest: guestRestart, vote: [] })
+  },
+  // todo: エラーハンドリング
+  finishRoom({ _commit, state }) {
+    db.collection('rooms')
+      .doc(state.room.id)
+      .update({ isFinish: true })
   },
   // todo: エラーハンドリング
   deleteRoom({ _commit, state }) {
