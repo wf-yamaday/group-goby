@@ -206,12 +206,17 @@ export const actions = {
     const guestRestart = state.room.guest.map((user) => {
       return { ...user, isReady: false, thema: '' }
     })
+    const ownerUpdata = {
+      ...state.room.owner,
+      thema: ''
+    }
     db.collection('rooms')
       .doc(state.room.id)
       .update({
         isStart: false,
         isVoting: false,
         guest: guestRestart,
+        owner: ownerUpdata,
         vote: []
       })
   },
