@@ -271,10 +271,10 @@ export const getters = {
     if (state.isOwner) {
       return state.room.owner
     }
-    const user = state.room.guest.find((user) => user.id === state.userId)
-    if (user === undefined) {
+    if (state.room.guest === []) {
       return { isReady: false }
     } else {
+      const user = state.room.guest.find((user) => user.id === state.userId)
       return user
     }
   },
