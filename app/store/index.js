@@ -257,32 +257,44 @@ export const getters = {
   },
   // state.roomのowner, guestを配列化して取り出すgetter関数
   getUsers: (state) => {
+    if (!state.room) {
+      return []
+    }
     const users = [state.room.owner]
     return users.concat(state.room.guest)
   },
   isStart: (state) => {
+    if (!state.room) {
+      return false
+    }
     return state.room.isStart
   },
   isVoting: (state) => {
+    if (!state.room) {
+      return false
+    }
     return state.room.isVoting
   },
   // userIdから自分の状態を取得
   getUser: (state) => {
+    if (!state.room) {
+      return { isReady: false }
+    }
     if (state.isOwner) {
       return state.room.owner
     }
-    if (state.room.guest === []) {
+    const guest = state.room.guest
+    if (guest.length === 0) {
       return { isReady: false }
     } else {
-      const user = state.room.guest.find((user) => user.id === state.userId)
-      return user
+      return guest.find((user) => user.id === state.userId)
     }
   },
   getCategories: (state) => {
     return state.categories
   },
   isVoted: (state) => {
-    if (!state.room.vote) {
+    if (!state.room) {
       return false
     }
     return state.room.vote.some((item) => item.key === state.userId)
